@@ -13,7 +13,10 @@ build:
     script: python setup.py install --single-version-externally-managed --record record.txt
     string: py36_1
 requirements:
-    build: []
+    build:
+        - python
+        - cffi >=1.1.0
+        - cairo 1.14.*
     run:
         - python
         - cffi >=1.1.0
