@@ -11,7 +11,6 @@ source:
 build:
     number: '1'
     script: python setup.py install --single-version-externally-managed --record record.txt
-    string: py36_1
 requirements:
     build:
         - python
