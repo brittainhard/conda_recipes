@@ -1,0 +1,42 @@
+# This file created by conda-build 2.1.10
+# meta.yaml template originally from:
+# /recipe_root, last modified Tue Jun  6 16:22:05 2017
+# ------------------------------------------------
+
+package:
+    name: findspark
+    version: 1.1.0
+source:
+    fn: findspark-1.1.0.tar.gz
+    sha256: 9033e8429a3e8ddd6a2c8849c8ed65a57e51e00c96320d53a52cbfb3040e8861
+    url: https://pypi.io/packages/source/f/findspark/findspark-1.1.0.tar.gz
+build:
+    noarch: ''
+    noarch_python: false
+    number: '0'
+    script: python setup.py install
+requirements:
+    build:
+        - ncurses 5.9
+        - readline 6.2
+        - openssl 1.0.2k
+        - sqlite 3.13.0
+        - ca-certificates 2017.4.17
+        - tk 8.5.19
+        - zlib 1.2.11
+        - python 2.7.13
+    run:
+        - python
+test:
+    imports:
+        - findspark
+about:
+    dev_url: https://github.com/minrk/findspark
+    home: https://github.com/minrk/findspark
+    license: BSD 3-clause
+    license_family: BSD
+    license_file: LICENSE.md
+    summary: Find pyspark to make it importable.
+extra:
+    recipe-maintainers:
+        - brittainhard
