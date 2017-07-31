@@ -1,0 +1,35 @@
+# This file created by conda-build 2.1.4
+# meta.yaml template originally from:
+# /recipe_root, last modified Mon Feb 27 16:49:27 2017
+# ------------------------------------------------
+
+package:
+    name: ipython-sql
+    version: 0.3.6
+source:
+    fn: ipython-sql-0.3.6.tar.gz
+    md5: d4feb00ac5806d7640b2545a43974766
+    url: https://pypi.python.org/packages/source/i/ipython-sql/ipython-sql-0.3.6.tar.gz
+build:
+    number: '1'
+    script: python setup.py install --single-version-externally-managed --record record.txt
+    string: py27_1
+requirements:
+    build: []
+    run:
+        - python
+        - prettytable
+        - ipython >=1.0
+        - sqlalchemy >=0.6.7
+        - sqlparse
+        - six
+test:
+    imports:
+        - sql
+about:
+    home: https://pypi.python.org/pypi/ipython-sql
+    license: MIT
+    summary: RDBMS access via IPython
+extra:
+    recipe-maintainers:
+        - sodre
