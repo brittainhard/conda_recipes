@@ -1,0 +1,36 @@
+# This file created by conda-build 2.1.16
+# meta.yaml template originally from:
+# /recipe_root, last modified Wed Jun 28 21:02:05 2017
+# ------------------------------------------------
+
+package:
+    name: configurable-http-proxy
+    version: 2.0.4
+source:
+    fn: 2.0.4.tar.gz
+    sha256: fee6ce0a8f93288cc47a19498a51fcca050da54c166b3c3ea30032f8241045e8
+    url: https://github.com/jupyterhub/configurable-http-proxy/archive/2.0.4.tar.gz
+build:
+    noarch: ''
+    noarch_python: false
+    number: '0'
+    script: npm install -g .
+    string: '0'
+requirements:
+    build:
+        - nodejs 6.10.3 0
+        - libgcc 5.2.0 0
+    run:
+        - nodejs 6.*
+test:
+    commands:
+        - configurable-http-proxy -h
+about:
+    home: https://github.com/jupyterhub/configurable-http-proxy
+    license: BSD 3-Clause
+    license_file: COPYING.md
+    summary: node-http-proxy plus a REST API
+extra:
+    final: true
+    recipe-maintainers:
+        - brittainhard

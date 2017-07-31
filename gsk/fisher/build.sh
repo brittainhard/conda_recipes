@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Install missing GNU stuff
+sudo yum install gcc -y
+
 $PYTHON setup.py install
 
 # Add more build steps here, if they are necessary.

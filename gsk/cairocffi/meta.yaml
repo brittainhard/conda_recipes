@@ -7,10 +7,9 @@ source:
         - dlopen-patch.linux.txt
     url: https://pypi.io/packages/source/c/cairocffi/cairocffi-0.8.0.tar.gz
     sha256: 65f21e6786e2b255ab1d3fda53a365a3565bb1808cabbbe59d99a797c61d3545
-        
+
 build:
     number: '1'
-    script: python setup.py install --single-version-externally-managed --record record.txt
 requirements:
     build:
         - python

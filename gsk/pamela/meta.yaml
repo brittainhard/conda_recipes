@@ -1,0 +1,30 @@
+# This file created by conda-build 2.1.4
+# meta.yaml template originally from:
+# /recipe_root, last modified Mon Feb 20 21:34:05 2017
+# ------------------------------------------------
+
+package:
+    name: pamela
+    version: 0.3.0
+source:
+    fn: pamela-0.3.0.tar.gz
+    md5: de6516118d51eb5fc97017f3b6d5c68b
+    url: https://pypi.io/packages/source/p/pamela/pamela-0.3.0.tar.gz
+build:
+    number: '0'
+    script: pip install --no-deps .
+requirements:
+    build:
+        - python
+    run:
+        - python
+test:
+    imports:
+        - pamela
+about:
+    home: https://github.com/minrk/pamela
+    license: MIT
+    summary: PAM interface using ctypes
+extra:
+    recipe-maintainers:
+        - brittainhard
