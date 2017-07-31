@@ -1,0 +1,28 @@
+# This file created by conda-build 2.0.7
+# meta.yaml template originally from:
+# /opt/recipe, last modified Fri Jan 13 19:33:09 2017
+# ------------------------------------------------
+
+package:
+    name: geneimpacts
+    version: 0.3.1
+source:
+    fn: geneimpacts-0.3.1.tar.gz
+    md5: 160664bc41fbee3e9d4fd62785f4af68
+    url: https://pypi.python.org/packages/7e/01/cbb6820939cc08bab0a9b4487836523608e94928ff626204c42cb70db42b/geneimpacts-0.3.1.tar.gz
+build:
+    skip: True #  [not py27]
+    number: '0'
+requirements:
+    build:
+        - python
+        - setuptools
+    run:
+        - python
+test:
+    imports:
+        - geneimpacts
+about:
+    home: https://github.com/brentp/geneimpacts
+    license: MIT
+    summary: prioritize effects of variant annotations from VEP, SnpEff, et al.
