@@ -1,10 +1,5 @@
 #!/bin/bash
 
-export SDLDIR="${PREFIX}/include/SDL2"
-export CFLAGS="${CFLAGS} -I${SDLDIR}"
-echo "-------------------------------------------------------"
-echo $CFLAGS
-
 $PYTHON setup.py install
 
 # Add more build steps here, if they are necessary.

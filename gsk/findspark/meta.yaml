@@ -22,8 +22,8 @@ requirements:
         - openssl 1.0.2k
         - sqlite 3.13.0
         - ca-certificates 2017.4.17
-        - tk 8.5.19
-        - zlib 1.2.11
+        - tk 8.5.18
+        - zlib 1.2.8
         - python 2.7.13
     run:
         - python
