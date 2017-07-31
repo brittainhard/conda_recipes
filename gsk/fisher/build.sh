@@ -1,6 +1,5 @@
 #!/bin/bash
 
-sudo yum install gcc
 $PYTHON setup.py install
 
 # Add more build steps here, if they are necessary.

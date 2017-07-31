@@ -8,8 +8,8 @@ package:
     version: 0.3.1
 source:
     fn: geneimpacts-0.3.1.tar.gz
-    md5: 160664bc41fbee3e9d4fd62785f4af68
-    url: https://pypi.python.org/packages/7e/01/cbb6820939cc08bab0a9b4487836523608e94928ff626204c42cb70db42b/geneimpacts-0.3.1.tar.gz
+    sha256: 03b2c5ca07dd490472329981cf9700d1473780451f052be7459c644ce7f31a50
+    url: https://files.pythonhosted.org/packages/7e/01/cbb6820939cc08bab0a9b4487836523608e94928ff626204c42cb70db42b/geneimpacts-0.3.1.tar.gz
 build:
     skip: True #  [not py27]
     number: '0'

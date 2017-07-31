@@ -8,8 +8,8 @@ package:
     version: 3.0.0
 source:
     fn: mygene-3.0.0.tar.gz
-    md5: cf1e1182619c7506bf15d0d4f88badf2
-    url: https://pypi.python.org/packages/53/94/6c9975eef99f64cecef912de80615223abfb6dab804bc600b4fe1104eee8/mygene-3.0.0.tar.gz
+    sha256: 36e5e42e05ade82141b7a82e5f9249546fabe5e9f47fe18c1535e6cedc603314
+    url: https://files.pythonhosted.org/packages/53/94/6c9975eef99f64cecef912de80615223abfb6dab804bc600b4fe1104eee8/mygene-3.0.0.tar.gz
 build:
     skip: 'False'
 requirements:

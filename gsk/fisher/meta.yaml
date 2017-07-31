@@ -4,8 +4,8 @@ package:
 
 source:
   fn: fisher-0.1.4.tar.gz
-  url: https://pypi.python.org/packages/source/f/fisher/fisher-0.1.4.tar.gz
-  md5: bfc763b7333a1f428e4c447dd8a85968
+  url: https://files.pythonhosted.org/packages/b2/03/da73cc8582c34bafbc4ec4b572f9691c9ae5d0ae743a359b1d16414439f9/fisher-0.1.4.tar.gz
+  sha256: bba9e4ece8dda18f7e67fee487947a5ac28ed2bb138600da8b214ac051f87ebf
 
 build:
   skip: True #  [not py27]
