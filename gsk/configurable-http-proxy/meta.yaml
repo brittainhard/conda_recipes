@@ -18,7 +18,7 @@ build:
     string: '0'
 requirements:
     build:
-        - nodejs 6.10.3 0
+        - nodejs 6.* 0
         - libgcc 5.2.0 0
     run:
         - nodejs 6.*
