@@ -11,9 +11,8 @@ source:
     sha256: cbaaeb937a56ac4a1fef3d8b3a119fce77065d11a95db2006a64d9964ccdba5c
     url: https://pypi.io/packages/source/j/jupyterhub/jupyterhub-0.7.2.tar.gz
 build:
-    number: '0'
+    number: 0
     script: pip install --no-deps .
-    string: py36_0
 requirements:
     build:
         - configurable-http-proxy
