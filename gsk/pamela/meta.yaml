@@ -6,7 +6,7 @@ source:
     md5: de6516118d51eb5fc97017f3b6d5c68b
     url: https://pypi.io/packages/source/p/pamela/pamela-0.3.0.tar.gz
 build:
-    number: '0'
+    number: 0
     script: pip install --no-deps .
 requirements:
     build:

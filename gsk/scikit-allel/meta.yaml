@@ -1,0 +1,59 @@
+package:
+  name: scikit-allel
+  version: 1.1.6
+
+source:
+  fn: scikit-allel-1.1.6.tar.gz
+  url: https://pypi.io/packages/source/s/scikit-allel/scikit-allel-1.1.6.tar.gz
+  sha256: 855eeb9a26b4f7e71487542d03efd0fda372aea112eb2d2d3a51a1e3cfa89d86
+
+build:
+  number: 0
+  script: python setup.py install --single-version-externally-managed --record record.txt
+
+requirements:
+  build:
+    - python
+    - setuptools
+    - cython
+    - numpy x.x
+  run:
+    - python
+    - numpy x.x
+    - scipy
+    - scikit-learn
+    - numexpr
+    - dask
+    - h5py
+    - bcolz
+    - zarr
+    - numcodecs
+    - matplotlib
+    - seaborn
+    - pandas
+
+test:
+  requires:
+    - nose
+  imports:
+    - allel
+    - allel.opt.model
+    - allel.opt.stats
+    - allel.opt.io_vcf_read
+    - allel.test
+    - allel.test.model
+    - allel.test.test_io_vcf_read
+  commands:
+    - python -m nose allel -v --exclude=from_gff3_region
+
+about:
+  home: http://github.com/cggh/scikit-allel
+  license: MIT
+  license_file: LICENSE
+  summary: 'A Python package for exploring and analysing genetic variation data.'
+  doc_url: http://scikit-allel.readthedocs.io/
+  dev_url: https://github.com/cggh/scikit-allel
+
+extra:
+  recipe-maintainers:
+    - brittainhard

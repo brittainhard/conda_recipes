@@ -1,0 +1,30 @@
+package:
+    name: statsd
+    version: 3.2.1
+source:
+    fn: statsd-3.2.1.tar.gz
+    sha256: 3fa92bf0192af926f7a0d9be031fe3fd0fbaa1992d42cf2f07e68f76ac18288e
+    url: https://pypi.python.org/packages/source/s/statsd/statsd-3.2.1.tar.gz
+build:
+    number: 0
+    script: python setup.py install --single-version-externally-managed --record=record.txt
+requirements:
+    build:
+        - python
+        - setuptools
+    run:
+        - python
+test:
+    commands:
+        - python -m nose statsd
+    requires:
+        - nose
+        - python
+        - mock
+about:
+    home: https://github.com/jsocol/pystatsd
+    license: MIT
+    summary: A Python client for statsd
+extra:
+    recipe-maintainers:
+        - brittainhard
