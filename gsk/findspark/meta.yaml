@@ -17,14 +17,13 @@ build:
     script: python setup.py install
 requirements:
     build:
-        - ncurses 5.9
-        - readline 6.2
-        - openssl 1.0.2k
-        - sqlite 3.13.0
-        - ca-certificates 2017.4.17
-        - tk 8.5.18
-        - zlib 1.2.8
-        - python 2.7.13
+        - ncurses
+        - readline
+        - openssl
+        - sqlite
+        - tk
+        - zlib
+        - python
     run:
         - python
 test:

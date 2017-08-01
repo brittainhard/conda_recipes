@@ -1,0 +1,34 @@
+package:
+  name: prettytable
+  version: 0.7.2
+
+source:
+  fn: prettytable-0.7.2.tar.gz
+  url: https://files.pythonhosted.org/packages/e0/a1/36203205f77ccf98f3c6cf17cf068c972e6458d7e58509ca66da949ca347/prettytable-0.7.2.tar.gz
+  sha256: 2d5460dc9db74a32bcc8f9f67de68b2c4f4d2f01fa3bd518764c69156d9cacd9
+
+build:
+  number: 0
+
+requirements:
+  build:
+    - python
+    - setuptools
+
+  run:
+    - python
+
+test:
+  imports:
+    - prettytable
+
+about:
+  home: http://code.google.com/p/prettytable
+  license_file: COPYING
+  license: BSD 3-Clause
+  license_family: BSD
+  summary: 'A simple Python library for easily displaying tabular data in a visually appealing ASCII table format'
+
+extra:
+  recipe-maintainers:
+    - brittainhard
