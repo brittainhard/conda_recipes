@@ -1,0 +1,37 @@
+package:
+  name: py4j
+  version: 0.10.5
+
+source:
+  fn: py4j-0.10.5.zip
+  url: https://files.pythonhosted.org/packages/4e/e2/aa8bff77c8f61ba1acb1c039a86db0e69f900aac1a62e84be43532a38abd/py4j-0.10.5.zip
+  sha256: 86f78acff01b73fd8d2adaa713b608ddad6c9a0a00aaa71d6087827a713eed00
+
+build:
+  number: 0
+
+requirements:
+  build:
+    - python
+    - setuptools
+
+  run:
+    - python
+
+test:
+  imports:
+    - py4j
+    - py4j.tests
+
+about:
+  home: http://py4j.sourceforge.net/
+  license: BSD 3-Clause
+  license_family: BSD
+  license_file: LICENSE.txt
+  summary: 'Enables Python programs to dynamically access arbitrary Java objects'
+  dev_url: https://github.com/bartdag/py4j
+  doc_url: http://py4j.sourceforge.net/
+
+extra:
+  recipe-maintainers:
+    - brittainhard
