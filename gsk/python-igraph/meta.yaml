@@ -1,0 +1,50 @@
+package:
+  name: python-igraph
+  version: 0.7.1.post6
+
+source:
+  fn: python-igraph-0.7.1.post6.tar.gz
+  url: https://pypi.io/packages/source/p/python-igraph/python-igraph-0.7.1.post6.tar.gz
+  sha256: a5ea42790a077eadb3d1e8f82edc47516fea4a2b26bbf52bfc148370fe0fe676
+
+build:
+  number: 0
+  script: python setup.py install --single-version-externally-managed --record record.txt
+  skip : true  # [win]
+
+requirements:
+  build:
+    - igraph 0.7.1
+    - pkg-config
+    - python
+    - setuptools
+    - toolchain
+
+  run:
+    - igraph 0.7.1
+    - pycairo >=1.10,<2
+    - python
+
+test:
+  files:
+    - test_cairo.py
+  imports:
+    - igraph
+    - igraph.app
+    - igraph.drawing
+    - igraph.remote
+    - igraph.test
+    - igraph.vendor
+  commands:
+    - python -c 'from igraph.test import run_tests; run_tests()'
+    - python test_cairo.py
+
+about:
+  home: http://pypi.python.org/pypi/python-igraph
+  license: GPL
+  license_file: COPYING
+  summary: 'High performance graph data structures and algorithms'
+
+extra:
+  recipe-maintainers:
+    - sodre

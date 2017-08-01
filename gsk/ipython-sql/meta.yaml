@@ -1,8 +1,3 @@
-# This file created by conda-build 2.1.4
-# meta.yaml template originally from:
-# /recipe_root, last modified Mon Feb 27 16:49:27 2017
-# ------------------------------------------------
-
 package:
     name: ipython-sql
     version: 0.3.6
@@ -13,7 +8,6 @@ source:
 build:
     number: '1'
     script: python setup.py install --single-version-externally-managed --record record.txt
-    string: py27_1
 requirements:
     build: []
     run:
@@ -32,4 +26,4 @@ about:
     summary: RDBMS access via IPython
 extra:
     recipe-maintainers:
-        - sodre
+        - brittainhard

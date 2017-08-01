@@ -15,7 +15,15 @@ build:
     script: pip install --no-deps .
     string: py36_0
 requirements:
-    build: []
+    build:
+        - configurable-http-proxy
+        - python
+        - traitlets >=4.1
+        - tornado >=4.1
+        - jinja2
+        - pamela
+        - sqlalchemy
+        - requests
     run:
         - configurable-http-proxy
         - python
@@ -40,4 +48,4 @@ about:
     summary: Multi-user server for Jupyter notebooks
 extra:
     recipe-maintainers:
-        - minrk
+        - brittainhard
