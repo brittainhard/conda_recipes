@@ -1,55 +1,51 @@
+{% set name = "openpyxl" %}
+{% set version = "1.8.6" %}
+{% set hash_type = "sha256" %}
+{% set hash_value = "aa11a4acd2765392808bca2041f6f9ba17565c72dccc3f5d876bf78effa06126" %}
+
 package:
-  name: openpyxl
-  version: 1.8.6
+  version: '{{ version }}'
+  name: '{{ name|lower }}'
 
 source:
-  fn: openpyxl-1.8.6.tar.gz
-  url: https://files.pythonhosted.org/packages/c2/ae/4ac6659a37bac4c496cc59378b95e5fbbaf3c1d6249827bb7c7516de979a/openpyxl-1.8.6.tar.gz
-  sha256: aa11a4acd2765392808bca2041f6f9ba17565c72dccc3f5d876bf78effa06126
+  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+  '{{ hash_type }}': '{{ hash_value }}'
+  fn: '{{ name }}-{{ version }}.tar.gz'
 
 build:
   number: 0
+  script: python setup.py install  --single-version-externally-managed --record=record.txt
 
 requirements:
+  run:
+    - python
   build:
     - python
     - setuptools
-    - jdcal
-    - et_xmlfile
-
-  run:
-    - python
-    - jdcal
-    - et_xmlfile
 
 test:
   imports:
     - openpyxl
-    - openpyxl.cell
-    - openpyxl.chart
-    - openpyxl.chartsheet
-    - openpyxl.comments
-    - openpyxl.compat
-    - openpyxl.descriptors
-    - openpyxl.drawing
-    - openpyxl.formatting
-    - openpyxl.formula
-    - openpyxl.packaging
-    - openpyxl.pivot
     - openpyxl.reader
+    - openpyxl.shared
+    - openpyxl.shared.compat
     - openpyxl.styles
-    - openpyxl.utils
-    - openpyxl.workbook
-    - openpyxl.workbook.external_link
-    - openpyxl.worksheet
     - openpyxl.writer
-    - openpyxl.xml
 
 about:
-  home: https://openpyxl.readthedocs.io
+  dev_url: ''
+  description: "openpyxl\n========\n\nopenpyxl is a Python library to read/write Excel 2010 xlsx/xlsm/xltx/xltm files.\n\nIt was born from lack of existing library to read/write natively from Python\nthe\
+    \ Office Open XML format.\n\nAll kudos to the PHPExcel team as openpyxl was initially based on `PHPExcel\n<http://www.phpexcel.net/>`_\n\n\nMailing List\n============\n\nOfficial user list can be found\
+    \ on\nhttp://groups.google.com/group/openpyxl-users\n\n\nSample code::\n\n    from openpyxl import Workbook\n    wb = Workbook()\n\n    # grab the active worksheet\n    ws = wb.active\n\n    # Data\
+    \ can be assigned directly to cells\n    ws['A1'] = 42\n\n    # Rows can also be appended\n    ws.append([1, 2, 3])\n\n    # Python types will automatically be converted\n    import datetime\n    ws['A2']\
+    \ = datetime.datetime.now()\n\n    # Save the file\n    wb.save(\"sample.xlsx\")\n\n\nOfficial documentation\n======================\n\nThe documentation is at: https://openpyxl.readthedocs.io\n\n*\
+    \ installation methods\n* code examples\n* instructions for contributing\n\nRelease notes: https://openpyxl.readthedocs.io/en/latest/changes.html\n"
   license: MIT License
-  summary: 'A Python library to read/write Excel 2010 xlsx/xlsm files'
   license_family: MIT
+  summary: A Python library to read/write Excel 2010 xlsx/xlsm files
+  home: http://openpyxl.readthedocs.org
+  license_file: ''
+  doc_url: ''
 
 extra:
   recipe-maintainers:

@@ -48,4 +48,5 @@ about:
   doc_url: ''
 
 extra:
-  recipe-maintainers: ''
+  recipe-maintainers:
+    - brittainhard
