@@ -32,9 +32,6 @@ requirements:
 test:
   imports:
     - haralyzer
-  requires:
-    - pytest-cov
-    - python-coveralls
 
 about:
   dev_url: ''
