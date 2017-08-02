@@ -1,0 +1,18 @@
+name: package_tester
+channels:
+    - brittainhard
+dependencies:
+    - findspark
+    - jupyterhub
+    - mygene
+    - openpyxl
+    - prettytable
+    - py4j
+    - pyfasta
+    - python-docx
+    - statsd
+    - suds-jurko
+    - haralyzer
+    - langdetect
+    - oauth
+    - pyimzML

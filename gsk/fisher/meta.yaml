@@ -8,7 +8,7 @@ source:
   sha256: bba9e4ece8dda18f7e67fee487947a5ac28ed2bb138600da8b214ac051f87ebf
 
 build:
-  skip: True #  [not py27]
+  skip: True #  [just py27]
   number: 0
 
 requirements:

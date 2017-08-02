@@ -1,17 +1,23 @@
+{% set name = "opentargets" %}
+{% set version = "2.0.2" %}
+{% set hash_type = "sha256" %}
+{% set hash_value = "7b294721d0e2c62eb1e27197143f7a64b53e1e6d055d0ba835c6a1ec732f3d06" %}
+
 package:
-  name: opentargets
-  version: 2.0.2
+  version: '{{ version }}'
+  name: '{{ name|lower }}'
 
 source:
-  fn: opentargets-2.0.2.tar.gz
-  url: https://pypi.python.org/packages/bf/df/b6f4833df829561569bd7d47ef2deb90b3ebb30d93e618b248d3c3443088/opentargets-2.0.2.tar.gz
-  md5: 1961742f5f01d4effe103cedef8626b3
+  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+  '{{ hash_type }}': '{{ hash_value }}'
+  fn: '{{ name }}-{{ version }}.tar.gz'
 
 build:
   number: 0
+  script: 'python setup.py install '
 
 requirements:
-  build:
+  run:
     - python
     - requests >=2.11.1,<3.0
     - cachecontrol ==0.11.6
@@ -19,8 +25,7 @@ requirements:
     - h2 ==2.4.2
     - future ==0.16.0
     - pyyaml
-
-  run:
+  build:
     - python
     - requests >=2.11.1,<3.0
     - cachecontrol ==0.11.6
@@ -34,11 +39,15 @@ test:
     - opentargets
 
 about:
-  home: https://github.com/opentargets/opentargets-py
+  dev_url: ''
+  description: ''
   license: Apache License, Version 2.0
-  summary: 'Client for Open Targets REST API at targetvalidation.org'
   license_family: APACHE
+  summary: Client for Open Targets REST API at targetvalidation.org
+  home: https://github.com/opentargets/opentargets-py
+  license_file: ''
+  doc_url: ''
 
 extra:
   recipe-maintainers:
-    - brittainhard
+      - brittainhard
