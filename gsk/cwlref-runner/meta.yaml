@@ -1,0 +1,36 @@
+package:
+  name: cwlref-runner
+  version: 1.0
+
+source:
+  fn: cwlref-runner-1.0.tar.gz
+  url: https://pypi.python.org/packages/ba/71/473777c3f190fca0546e9fb9aff38d198bf9e5e3d8af73fb9358c9f72d58/cwlref-runner-1.0.tar.gz
+  md5: 73a71ef3a1610401d82338236df9aefd
+
+build:
+  number: 0
+  entry_points:
+    - cwl-runner=cwltool.main:main
+
+requirements:
+  build:
+    - python
+    - setuptools
+    - cwltool
+
+  run:
+    - python
+    - cwltool
+
+test:
+  commands:
+    - cwl-runner --help
+about:
+  home: http://www.commonwl.org
+  license: Apache 2.0
+  summary: 'Common workflow language reference implementation'
+  license_family: APACHE
+
+extra:
+  recipe-maintainers:
+    - brittainhard

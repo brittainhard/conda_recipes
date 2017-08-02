@@ -1,0 +1,51 @@
+package:
+  name: fancyimpute
+  version: 0.2.0
+
+source:
+  fn: fancyimpute-0.2.0.tar.gz
+  url: https://pypi.python.org/packages/b8/4d/f460fe747949d2b84f21cfaebe58fe1de8f4dcd6779d5fc58adb2f885417/fancyimpute-0.2.0.tar.gz
+  md5: 68c0a43aec2c6fce3d66e726b67c9bb4
+
+build:
+  number: 0
+
+requirements:
+  build:
+    - python
+    - setuptools
+    - six
+    - knnimpute
+    - numpy >=1.10
+    - scipy
+    - cvxpy
+    - scikit-learn >=0.17.1
+    - downhill
+    - climate
+    - theano
+
+  run:
+    - python
+    - six
+    - knnimpute
+    - numpy >=1.10
+    - scipy
+    - cvxpy
+    - scikit-learn >=0.17.1
+    - downhill
+    - climate
+    - theano
+
+test:
+  imports:
+    - fancyimpute
+
+about:
+  home: https://github.com/hammerlab/fancyimpute
+  license: Apache Software License
+  summary: 'Matrix completion and feature imputation algorithms'
+  license_family: APACHE
+
+extra:
+  recipe-maintainers:
+    - brittainhard

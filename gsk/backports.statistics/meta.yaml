@@ -1,0 +1,33 @@
+package:
+  name: backports.statistics
+  version: 0.1.0
+
+source:
+  fn: backports.statistics-0.1.0.tar.gz
+  url: https://pypi.python.org/packages/a1/43/97a2f97605c6870074c0cc80c353896726b03725ff6b92938336df23540f/backports.statistics-0.1.0.tar.gz
+  md5: e23665fc7d2f9dd5742175d31176d007
+
+build:
+  number: 0
+
+requirements:
+  build:
+    - python
+    - setuptools
+
+  run:
+    - python
+
+test:
+  imports:
+    - backports.statistics
+
+about:
+  home: https://github.com/graingert/backports.statistics
+  license: Python Software Foundation License
+  summary: 'statistics backport 2.6 - 3.3'
+  license_family: OTHER
+
+extra:
+  recipe-maintainers:
+    - brittainhard

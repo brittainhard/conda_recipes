@@ -1,0 +1,36 @@
+package:
+  name: langdetect
+  version: 1.0.7
+
+source:
+  fn: langdetect-1.0.7.zip
+  url: https://pypi.python.org/packages/59/59/4bc44158a767a6d66de18c4136c8aa90491d56cc951c10b74dd1e13213c9/langdetect-1.0.7.zip
+  md5: 6675db2d8abccb97246372767270e912
+
+build:
+  number: 0
+
+requirements:
+  build:
+    - python
+    - setuptools
+    - six
+
+  run:
+    - python
+    - six
+
+test:
+  imports:
+    - langdetect
+    - langdetect.tests
+    - langdetect.utils
+
+  home: https://github.com/Mimino666/langdetect
+  license: Apache Software License
+  summary: "Language detection library ported from Google's language-detection."
+  license_family: APACHE
+
+extra:
+  recipe-maintainers:
+    - brittainhard

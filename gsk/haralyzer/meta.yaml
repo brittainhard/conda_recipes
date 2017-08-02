@@ -1,0 +1,43 @@
+package:
+  name: haralyzer
+  version: 1.4.10
+
+source:
+  fn: haralyzer-1.4.10.tar.gz
+  url: https://pypi.python.org/packages/1c/97/ae633bfec14ad8e63a086b8cef0e1800de5632ce57874635001d0047acb1/haralyzer-1.4.10.tar.gz
+  md5: 7787a63affe5acde07112ef2f7755b7f
+
+build:
+  number: 0
+
+requirements:
+  build:
+    - python
+    - setuptools
+    - cached-property
+    - python-dateutil
+    - backports.statistics
+
+  run:
+    - python
+    - cached-property
+    - python-dateutil
+    - backports.statistics
+
+test:
+  imports:
+    - haralyzer
+
+  requires:
+    - pytest-cov
+    - python-coveralls
+
+about:
+  home: https://github.com/mrname/haralyzer
+  license: MIT License
+  summary: 'A python framework for getting useful stuff out of HAR files'
+  license_family: MIT
+
+extra:
+  recipe-maintainers:
+    - brittainhard
