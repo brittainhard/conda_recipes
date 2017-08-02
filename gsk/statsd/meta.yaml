@@ -1,30 +1,51 @@
+{% set name = "statsd" %}
+{% set version = "3.2.1" %}
+{% set hash_type = "sha256" %}
+{% set hash_value = "3fa92bf0192af926f7a0d9be031fe3fd0fbaa1992d42cf2f07e68f76ac18288e" %}
+
 package:
-    name: statsd
-    version: 3.2.1
+  version: '{{ version }}'
+  name: '{{ name|lower }}'
+
 source:
-    fn: statsd-3.2.1.tar.gz
-    sha256: 3fa92bf0192af926f7a0d9be031fe3fd0fbaa1992d42cf2f07e68f76ac18288e
-    url: https://pypi.python.org/packages/source/s/statsd/statsd-3.2.1.tar.gz
+  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+  '{{ hash_type }}': '{{ hash_value }}'
+  fn: '{{ name }}-{{ version }}.tar.gz'
+
 build:
-    number: 0
-    script: python setup.py install --single-version-externally-managed --record=record.txt
+  number: 0
+  script: python setup.py install  --single-version-externally-managed --record=record.txt
+
 requirements:
-    build:
-        - python
-        - setuptools
-    run:
-        - python
+  run:
+    - python
+  build:
+    - python
+    - setuptools
+
 test:
-    commands:
-        - python -m nose statsd
-    requires:
-        - nose
-        - python
-        - mock
+  imports:
+    - statsd
+    - statsd.defaults
+
 about:
-    home: https://github.com/jsocol/pystatsd
-    license: MIT
-    summary: A Python client for statsd
+  dev_url: ''
+  description: "======================\nA Python statsd client\n======================\n\nstatsd_ is a friendly front-end to Graphite_. This is a Python client\nfor the statsd daemon.\n\n.. image:: https://travis-ci.org/jsocol/pystatsd.png?branch=master\n\
+    \   :target: https://travis-ci.org/jsocol/pystatsd\n   :alt: Travis-CI build status\n\n.. image:: https://pypip.in/v/statsd/badge.png?style=flat\n   :target: https://pypi.python.org/pypi/statsd/\n \
+    \  :alt: Latest release\n\n.. image:: https://pypip.in/py_versions/statsd/badge.svg?style=flat\n   :target: https://pypi.python.org/pypi/statsd/\n   :alt: Supported Python versions\n\n.. image:: https://pypip.in/wheel/statsd/badge.svg?style=flat\n\
+    \   :target: https://pypi.python.org/pypi/statsd/\n   :alt: Wheel Status\n\n.. image:: https://pypip.in/d/statsd/badge.png?style=flat\n   :target: https://pypi.python.org/pypi/statsd/\n   :alt: Downloads\n\
+    \n:Code:          https://github.com/jsocol/pystatsd\n:License:       MIT; see LICENSE file\n:Issues:        https://github.com/jsocol/pystatsd/issues\n:Documentation: http://statsd.readthedocs.org/\n\
+    \nQuickly, to use::\n\n    >>> import statsd\n    >>> c = statsd.StatsClient('localhost', 8125)\n    >>> c.incr('foo')  # Increment the 'foo' counter.\n    >>> c.timing('stats.timed', 320)  # Record\
+    \ a 320ms 'stats.timed'.\n\nYou can also add a prefix to all your stats::\n\n    >>> import statsd\n    >>> c = statsd.StatsClient('localhost', 8125, prefix='foo')\n    >>> c.incr('bar')  # Will be\
+    \ 'foo.bar' in statsd/graphite.\n\n\nInstalling\n==========\n\nThe easiest way to install statsd is with pip!\n\nYou can install from PyPI::\n\n    $ pip install statsd\n\nOr GitHub::\n\n    $ pip install\
+    \ -e git+https://github.com/jsocol/pystatsd#egg=statsd\n\nOr from source::\n\n    $ git clone https://github.com/jsocol/pystatsd\n    $ cd statsd\n    $ python setup.py install\n\n\nDocs\n====\n\nThere\
+    \ are lots of docs in the ``docs/`` directory and on ReadTheDocs_.\n\n\n.. _statsd: https://github.com/etsy/statsd\n.. _Graphite: http://graphite.readthedocs.org/\n.. _ReadTheDocs: http://statsd.readthedocs.org/en/latest/index.html"
+  license: MIT License
+  license_family: MIT
+  summary: A simple statsd client.
+  home: https://github.com/jsocol/pystatsd
+  license_file: ''
+  doc_url: ''
+
 extra:
-    recipe-maintainers:
-        - brittainhard
+  recipe-maintainers: ''

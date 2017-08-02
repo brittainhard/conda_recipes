@@ -1,0 +1,48 @@
+{% set name = "suds" %}
+{% set version = "0.4" %}
+{% set hash_type = "sha256" %}
+{% set hash_value = "d5524ae523bb9e09c57bcdbd1efae2c287d20603688ea31f6020ed180a489af0" %}
+
+package:
+  version: '{{ version }}'
+  name: '{{ name|lower }}'
+
+source:
+  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+  '{{ hash_type }}': '{{ hash_value }}'
+  fn: '{{ name }}-{{ version }}.tar.gz'
+
+build:
+  number: 0
+  script: python setup.py install  --single-version-externally-managed --record=record.txt
+
+requirements:
+  run:
+    - python
+  build:
+    - python
+    - setuptools
+
+test:
+  imports:
+    - suds
+    - suds.bindings
+    - suds.mx
+    - suds.sax
+    - suds.transport
+    - suds.umx
+    - suds.xsd
+
+about:
+  dev_url: ''
+  description: UNKNOWN
+  license: UNKNOWN
+  license_family: OTHER
+  summary: Lightweight SOAP client
+  home: https://fedorahosted.org/suds
+  license_file: ''
+  doc_url: ''
+
+extra:
+  recipe-maintainers:
+      - brittainhard
