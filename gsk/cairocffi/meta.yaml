@@ -13,12 +13,12 @@ build:
 requirements:
     build:
         - python
-        - cffi >=1.1.0
-        - cairo 1.14.*
+        - cffi
+        - cairo
     run:
         - python
-        - cffi >=1.1.0
-        - cairo 1.14.*
+        - cffi
+        - cairo
 test:
     imports:
         - cairocffi

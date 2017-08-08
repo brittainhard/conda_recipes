@@ -1,3 +1,5 @@
 The command to get into a docker container:
 
-`sudo docker run --rm -it condaforge/linux-anvil /bin/bash`
+`docker build -t package_builds`
+`docker build rm package_builds .`
+`sudo docker run --rm -it package_builder /bin/bash`
