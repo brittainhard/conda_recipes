@@ -1,0 +1,43 @@
+{% set name = "fasteners" %}
+{% set version = "0.14.1" %}
+{% set md5 = "fcb13261c9b0039d9b1c4feb9bc75e04" %}
+
+package:
+  name: {{ name|lower }}
+  version: {{ version }}
+
+source:
+  fn: {{ name }}-{{ version }}.tar.gz
+  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+  md5: {{ md5 }}
+
+build:
+  number: 0
+  script: python setup.py install --single-version-externally-managed --record record.txt
+
+requirements:
+  build:
+    - python
+    - setuptools
+    - six
+    - monotonic >=0.1
+
+  run:
+    - python
+    - six
+    - monotonic >=0.1
+
+test:
+  imports:
+    - fasteners
+    - fasteners.tests
+
+about:
+  home: https://github.com/harlowja/fasteners
+  license: Apache 2.0
+  license_file: LICENSE
+  summary: A python package that provides useful locks.
+
+extra:
+  recipe-maintainers:
+    - brittainhard

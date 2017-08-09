@@ -1,0 +1,48 @@
+{% set name = "zarr" %}
+{% set version = "2.1.4" %}
+{% set sha256 = "2eb998752184a5f4976d65e643678bf866094220285ab51a926aa2ce9fc630a3" %}
+
+package:
+  name: {{ name|lower }}
+  version: {{ version }}
+
+source:
+  fn: {{ name }}-{{ version }}.tar.gz
+  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+  sha256: {{ sha256 }}
+
+build:
+  number: 0
+  script: python setup.py install --single-version-externally-managed --record record.txt
+
+requirements:
+  build:
+    - toolchain
+    - python
+    - cython
+    - setuptools
+    - setuptools_scm
+    - gcc
+  run:
+    - python
+    - numpy
+    - fasteners
+
+test:
+  requires:
+    - nose
+  imports:
+    - zarr
+    - zarr.blosc
+  commands:
+    - nosetests -v zarr
+
+about:
+  home: https://github.com/alimanfoo/zarr
+  license: MIT
+  license_file: LICENSE
+  summary: An implementation of chunked, compressed, N-dimensional arrays for Python.
+
+extra:
+  recipe-maintainers:
+    - brittainhard
