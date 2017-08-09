@@ -1,35 +1,51 @@
+{% set name = "cwlref-runner" %}
+{% set version = "1.0" %}
+{% set hash_type = "sha256" %}
+{% set hash_value = "a46662940c1e13453c1cb955167ef2223331449c58b026b7f06c905726aad619" %}
+
 package:
-  name: cwlref-runner
-  version: 1.0
+  version: '{{ version }}'
+  name: '{{ name|lower }}'
 
 source:
-  fn: cwlref-runner-1.0.tar.gz
-  url: https://pypi.python.org/packages/ba/71/473777c3f190fca0546e9fb9aff38d198bf9e5e3d8af73fb9358c9f72d58/cwlref-runner-1.0.tar.gz
-  md5: 73a71ef3a1610401d82338236df9aefd
+  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+  '{{ hash_type }}': '{{ hash_value }}'
+  fn: '{{ name }}-{{ version }}.tar.gz'
 
 build:
-  number: 0
   entry_points:
     - cwl-runner=cwltool.main:main
+  number: 0
+  script: python setup.py install  --single-version-externally-managed --record=record.txt
 
 requirements:
+  run:
+    - python
+    - cwltool
   build:
     - python
     - setuptools
     - cwltool
 
-  run:
-    - python
-    - cwltool
-
 test:
   commands:
     - cwl-runner --help
+
 about:
-  home: http://www.commonwl.org
+  dev_url: ''
+  description: 'This an optional companion package to "cwltool" which provides provides an
+
+    additional entry point under the alias "cwl-runner", which is the
+
+    implementation-agnostic name for the default CWL interpreter installed on a
+
+    host.'
   license: Apache 2.0
-  summary: 'Common workflow language reference implementation'
   license_family: APACHE
+  summary: Common workflow language reference implementation
+  home: http://www.commonwl.org
+  license_file: ''
+  doc_url: ''
 
 extra:
   recipe-maintainers:
