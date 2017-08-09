@@ -1,10 +1,10 @@
 package:
     name: schema-salad
-    version: 2.5.20170328195758
+    version: 2.6.20170806163416
 source:
-    fn: schema-salad-2.5.20170328195758.tar.gz
-    md5: d10e085b5488dd993afe364237fb599f
-    url: https://pypi.python.org/packages/b0/28/9c9dd97843caa49f4a52b03a4be05b9b9f3240f7eefbed22287403687b58/schema-salad-2.5.20170328195758.tar.gz
+    fn: schema-salad-2.6.20170806163416.tar.gz
+    sha256: af414fd5f89cf452e3581cda9fd403278db72256a6ed6bc13f62a19bb38fae46
+    url: https://files.pythonhosted.org/packages/fa/cb/707b7624e786e3a90d9fd3bb312612f1cc0ee2e7dcad79e26d4493ea9bf9/schema-salad-2.6.20170806163416.tar.gz
 build:
     entry_points:
         - schema-salad-tool=schema_salad.main:main
