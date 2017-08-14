@@ -1,19 +1,24 @@
+{% set name = "fancyimpute" %}
+{% set version = "0.2.0" %}
+{% set hash_type = "sha256" %}
+{% set hash_value = "c1ca8eb2c5ac3e2af2a7836c9352ce00224d4356da5035f66e51f6a21fbdadb3" %}
+
 package:
-  name: fancyimpute
-  version: 0.2.0
+  version: '{{ version }}'
+  name: '{{ name|lower }}'
 
 source:
-  fn: fancyimpute-0.2.0.tar.gz
-  url: https://pypi.python.org/packages/b8/4d/f460fe747949d2b84f21cfaebe58fe1de8f4dcd6779d5fc58adb2f885417/fancyimpute-0.2.0.tar.gz
-  md5: 68c0a43aec2c6fce3d66e726b67c9bb4
+  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+  '{{ hash_type }}': '{{ hash_value }}'
+  fn: '{{ name }}-{{ version }}.tar.gz'
 
 build:
   number: 0
+  script: python setup.py install  --single-version-externally-managed --record=record.txt
 
 requirements:
-  build:
+  run:
     - python
-    - setuptools
     - six
     - knnimpute
     - numpy >=1.10
@@ -23,9 +28,9 @@ requirements:
     - downhill
     - climate
     - theano
-
-  run:
+  build:
     - python
+    - setuptools
     - six
     - knnimpute
     - numpy >=1.10
@@ -41,11 +46,32 @@ test:
     - fancyimpute
 
 about:
-  home: https://github.com/hammerlab/fancyimpute
+  dev_url: ''
+  description: "|Build Status| |Coverage Status| |DOI|\n\nfancyimpute\n===========\n\nA variety of matrix completion and imputation algorithms implemented in\nPython.\n\nUsage\n-----\n\n.. code:: python\n\
+    \n    from fancyimpute import BiScaler, KNN, NuclearNormMinimization, SoftImpute\n\n    # X is the complete data matrix\n    # X_incomplete has the same values as X except a subset have been replace\
+    \ with NaN\n\n    # Use 3 nearest rows which have a feature to fill in each row's missing features\n    X_filled_knn = KNN(k=3).complete(X_incomplete)\n\n    # matrix completion using convex optimization\
+    \ to find low-rank solution\n    # that still matches observed values. Slow!\n    X_filled_nnm = NuclearNormMinimization().complete(X_incomplete)\n\n    # Instead of solving the nuclear norm objective\
+    \ directly, instead\n    # induce sparsity using singular value thresholding\n    X_filled_softimpute = SoftImpute().complete(X_incomplete_normalized)\n\n    # print mean squared error for the three\
+    \ imputation methods above\n    nnm_mse = ((X_filled_nnm[missing_mask] - X[missing_mask]) ** 2).mean()\n    print(\"Nuclear norm minimization MSE: %f\" % nnm_mse)\n\n    softImpute_mse = ((X_filled_softimpute[missing_mask]\
+    \ - X[missing_mask]) ** 2).mean()\n    print(\"SoftImpute MSE: %f\" % softImpute_mse)\n\n    knn_mse = ((X_filled_knn[missing_mask] - X[missing_mask]) ** 2).mean()\n    print(\"knnImpute MSE: %f\" %\
+    \ knn_mse)\n\nAlgorithms\n----------\n\n-  ``SimpleFill``: Replaces missing entries with the mean or median of\n   each column.\n\n-  ``KNN``: Nearest neighbor imputations which weights samples using\
+    \ the\n   mean squared difference on features for which two rows both have\n   observed data.\n\n-  ``SoftImpute``: Matrix completion by iterative soft thresholding of\n   SVD decompositions. Inspired\
+    \ by the\n   `softImpute <https://web.stanford.edu/~hastie/swData/softImpute/vignette.html>`__\n   package for R, which is based on `Spectral Regularization Algorithms\n   for Learning Large Incomplete\n\
+    \   Matrices <http://web.stanford.edu/~hastie/Papers/mazumder10a.pdf>`__\n   by Mazumder et. al.\n\n-  ``IterativeSVD``: Matrix completion by iterative low-rank SVD\n   decomposition. Should be similar\
+    \ to SVDimpute from `Missing value\n   estimation methods for DNA\n   microarrays <http://www.ncbi.nlm.nih.gov/pubmed/11395428>`__ by\n   Troyanskaya et. al.\n\n-  ``MICE``: Reimplementation of `Multiple\
+    \ Imputation by Chained\n   Equations <http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3074241/>`__.\n\n-  ``MatrixFactorization``: Direct factorization of the incomplete\n   matrix into low-rank ``U``\
+    \ and ``V``, with an L1 sparsity penalty on\n   the elements of ``U`` and an L2 penalty on the elements of ``V``.\n   Solved by gradient descent.\n\n-  ``NuclearNormMinimization``: Simple implementation\
+    \ of `Exact Matrix\n   Completion via Convex\n   Optimization <http://statweb.stanford.edu/~candes/papers/MatrixCompletion.pdf>`__\n   by Emmanuel Candes and Benjamin Recht using\n   `cvxpy <http://www.cvxpy.org/en/latest/>`__.\
+    \ Too slow for large\n   matrices.\n\n-  ``BiScaler``: Iterative estimation of row/column means and standard\n   deviations to get doubly normalized matrix. Not guaranteed to\n   converge but works\
+    \ well in practice. Taken from `Matrix Completion\n   and Low-Rank SVD via Fast Alternating Least\n   Squares <http://arxiv.org/abs/1410.2596>`__.\n\n.. |Build Status| image:: https://travis-ci.org/hammerlab/fancyimpute.svg?branch=master\n\
+    \   :target: https://travis-ci.org/hammerlab/fancyimpute\n.. |Coverage Status| image:: https://coveralls.io/repos/github/hammerlab/fancyimpute/badge.svg?branch=master\n   :target: https://coveralls.io/github/hammerlab/fancyimpute?branch=master\n\
+    .. |DOI| image:: https://zenodo.org/badge/doi/10.5281/zenodo.51773.svg\n   :target: http://dx.doi.org/10.5281/zenodo.51773\n"
   license: Apache Software License
-  summary: 'Matrix completion and feature imputation algorithms'
   license_family: APACHE
+  summary: Matrix completion and feature imputation algorithms
+  home: https://github.com/hammerlab/fancyimpute
+  license_file: ''
+  doc_url: ''
 
 extra:
-  recipe-maintainers:
-    - brittainhard
+  recipe-maintainers: ''

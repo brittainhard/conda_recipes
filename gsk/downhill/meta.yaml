@@ -1,0 +1,67 @@
+{% set name = "downhill" %}
+{% set version = "0.4.0" %}
+{% set hash_type = "sha256" %}
+{% set hash_value = "074ad91deb06c05108c67d982ef71ffffb6ede2c77201abc69e332649f823b42" %}
+
+package:
+  version: '{{ version }}'
+  name: '{{ name|lower }}'
+
+source:
+  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+  '{{ hash_type }}': '{{ hash_value }}'
+  fn: '{{ name }}-{{ version }}.tar.gz'
+
+build:
+  number: 0
+  script: python setup.py install  --single-version-externally-managed --record=record.txt
+
+requirements:
+  run:
+    - python
+    - theano
+    - click
+  build:
+    - python
+    - setuptools
+    - theano
+    - click
+
+test:
+  imports:
+    - downhill
+
+about:
+  dev_url: ''
+  description: ".. image:: https://travis-ci.org/lmjohns3/downhill.svg\n.. image:: https://coveralls.io/repos/lmjohns3/downhill/badge.svg\n   :target: https://coveralls.io/r/lmjohns3/downhill\n.. image::\
+    \ http://depsy.org/api/package/pypi/downhill/badge.svg\n   :target: http://depsy.org/package/python/downhill\n\n============\n``DOWNHILL``\n============\n\nThe ``downhill`` package provides algorithms\
+    \ for minimizing scalar loss\nfunctions that are defined using Theano_.\n\nSeveral optimization algorithms are included:\n\n- ADADELTA_\n- ADAGRAD_\n- Adam_\n- `Equilibrated SGD`_\n- `Nesterov's Accelerated\
+    \ Gradient`_\n- RMSProp_\n- `Resilient Backpropagation`_\n- `Stochastic Gradient Descent`_\n\nAll algorithms permit the use of regular or Nesterov-style momentum as well.\n\n.. _Theano: http://deeplearning.net/software/theano/\n\
+    \n.. _Stochastic Gradient Descent: http://downhill.readthedocs.org/en/stable/generated/downhill.first_order.SGD.html\n.. _Nesterov's Accelerated Gradient: http://downhill.readthedocs.org/en/stable/generated/downhill.first_order.NAG.html\n\
+    .. _Resilient Backpropagation: http://downhill.readthedocs.org/en/stable/generated/downhill.adaptive.RProp.html\n.. _ADAGRAD: http://downhill.readthedocs.org/en/stable/generated/downhill.adaptive.ADAGRAD.html\n\
+    .. _RMSProp: http://downhill.readthedocs.org/en/stable/generated/downhill.adaptive.RMSProp.html\n.. _ADADELTA: http://downhill.readthedocs.org/en/stable/generated/downhill.adaptive.ADADELTA.html\n..\
+    \ _Adam: http://downhill.readthedocs.org/en/stable/generated/downhill.adaptive.Adam.html\n.. _Equilibrated SGD: http://downhill.readthedocs.org/en/stable/generated/downhill.adaptive.ESGD.html\n\nQuick\
+    \ Start: Matrix Factorization\n=================================\n\nLet's say you have 100 samples of 1000-dimensional data, and you want to\nrepresent your data as 100 coefficients in a 10-dimensional\
+    \ basis. This is\npretty straightforward to model using Theano: you can use a matrix\nmultiplication as the data model, a squared-error term for optimization, and a\nsparse regularizer to encourage\
+    \ small coefficient values.\n\nOnce you have constructed an expression for the loss, you can optimize it with a\nsingle call to ``downhill.minimize``:\n\n.. code:: python\n\n  import downhill\n  import\
+    \ numpy as np\n  import theano\n  import theano.tensor as TT\n\n  FLOAT = 'df'[theano.config.floatX == 'float32']\n\n  def rand(a, b):\n      return np.random.randn(a, b).astype(FLOAT)\n\n  A, B, K\
+    \ = 20, 5, 3\n\n  # Set up a matrix factorization problem to optimize.\n  u = theano.shared(rand(A, K), name='u')\n  v = theano.shared(rand(K, B), name='v')\n  z = TT.matrix()\n  err = TT.sqr(z - TT.dot(u,\
+    \ v))\n  loss = err.mean() + abs(u).mean() + (v * v).mean()\n\n  # Minimize the regularized loss with respect to a data matrix.\n  y = np.dot(rand(A, K), rand(K, B)) + rand(A, B)\n\n  # Monitor during\
+    \ optimization.\n  monitors = (('err', err.mean()),\n              ('|u|<0.1', (abs(u) < 0.1).mean()),\n              ('|v|<0.1', (abs(v) < 0.1).mean()))\n\n  downhill.minimize(\n      loss=loss,\n\
+    \      train=[y],\n      patience=0,\n      batch_size=A,                 # Process y as a single batch.\n      max_gradient_norm=1,          # Prevent gradient explosion!\n      learning_rate=0.1,\n\
+    \      monitors=monitors,\n      monitor_gradients=True)\n\n  # Print out the optimized coefficients u and basis v.\n  print('u =', u.get_value())\n  print('v =', v.get_value())\n\nIf you prefer to\
+    \ maintain more control over your model during optimization,\ndownhill provides an iterative optimization interface:\n\n.. code:: python\n\n  opt = downhill.build(algo='rmsprop',\n                 \
+    \      loss=loss,\n                       monitors=monitors,\n                       monitor_gradients=True)\n\n  for metrics, _ in opt.iterate(train=[[y]],\n                                patience=0,\n\
+    \                                batch_size=A,\n                                max_gradient_norm=1,\n                                learning_rate=0.1):\n      print(metrics)\n\nIf that's still not\
+    \ enough, you can just plain ask downhill for the updates to\nyour model variables and do everything else yourself:\n\n.. code:: python\n\n  updates = downhill.build('rmsprop', loss).get_updates(\n\
+    \      batch_size=A, max_gradient_norm=1, learning_rate=0.1)\n  func = theano.function([z], loss, updates=list(updates))\n  for _ in range(100):\n      print(func(y))  # Evaluate func and apply variable\
+    \ updates.\n\nMore Information\n================\n\nSource: http://github.com/lmjohns3/downhill\n\nDocumentation: http://downhill.readthedocs.org\n\nMailing list: https://groups.google.com/forum/#!forum/downhill-users\n"
+  license: MIT License
+  license_family: MIT
+  summary: Stochastic optimization routines for Theano
+  home: http://github.com/lmjohns3/downhill
+  license_file: ''
+  doc_url: ''
+
+extra:
+  recipe-maintainers: ''

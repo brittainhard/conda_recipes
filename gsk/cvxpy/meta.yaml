@@ -1,0 +1,75 @@
+{% set name = "cvxpy" %}
+{% set version = "0.4.10" %}
+{% set hash_type = "sha256" %}
+{% set hash_value = "3f5112bd42855943298cf2d85d2a42832e7ebdaf55e053a9e3d2db52a46f001b" %}
+
+package:
+  version: '{{ version }}'
+  name: '{{ name|lower }}'
+
+source:
+  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+  '{{ hash_type }}': '{{ hash_value }}'
+  fn: '{{ name }}-{{ version }}.tar.gz'
+
+build:
+  number: 0
+  script: python setup.py install  --single-version-externally-managed --record=record.txt
+
+requirements:
+  run:
+    - python
+    - ecos >=2
+    - scs >=1.1.3
+    - multiprocess
+    - fastcache
+    - six
+    - toolz
+    - numpy >=1.9
+    - scipy >=0.15
+    - cvxcanon
+  build:
+    - python
+    - setuptools
+    - ecos >=2
+    - scs >=1.1.3
+    - multiprocess
+    - fastcache
+    - six
+    - toolz
+    - numpy >=1.9
+    - scipy >=0.15
+    - cvxcanon
+
+test:
+  imports:
+    - cvxpy
+    - cvxpy.atoms
+    - cvxpy.atoms.affine
+    - cvxpy.atoms.elementwise
+    - cvxpy.constraints
+    - cvxpy.expressions
+    - cvxpy.expressions.constants
+    - cvxpy.expressions.variables
+    - cvxpy.interface
+    - cvxpy.interface.numpy_interface
+    - cvxpy.lin_ops
+    - cvxpy.problems
+    - cvxpy.problems.problem_data
+    - cvxpy.problems.solvers
+    - cvxpy.tests
+    - cvxpy.transforms
+    - cvxpy.utilities
+
+about:
+  dev_url: ''
+  description: UNKNOWN
+  license: Apache v2.0
+  license_family: APACHE
+  summary: A domain-specific language for modeling convex optimization problems in Python.
+  home: http://github.com/cvxgrp/cvxpy/
+  license_file: ''
+  doc_url: ''
+
+extra:
+  recipe-maintainers: ''

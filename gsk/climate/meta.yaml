@@ -1,0 +1,60 @@
+{% set name = "climate" %}
+{% set version = "0.4.6" %}
+{% set hash_type = "sha256" %}
+{% set hash_value = "aae70d56187bd4c8f6f6af18fc3d994c24692450937ea7c2d95da9ec881a7baa" %}
+
+package:
+  version: '{{ version }}'
+  name: '{{ name|lower }}'
+
+source:
+  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+  '{{ hash_type }}': '{{ hash_value }}'
+  fn: '{{ name }}-{{ version }}.tar.gz'
+
+build:
+  number: 0
+  script: python setup.py install  --single-version-externally-managed --record=record.txt
+
+requirements:
+  run:
+    - python
+    - plac
+  build:
+    - python
+    - setuptools
+    - plac
+
+test:
+  imports:
+    - climate
+
+about:
+  dev_url: ''
+  description: "climate\n=======\n\nThis package contains some basic command line utilities for Python:\n\n- one wrapper over ``plac`` for quick command-line argument processing\n- another for ``logging``\
+    \ that lets us avoid copying that same horrid\n  ``logging.basicConfig(...)`` business in all of our scripts, and gives a\n  sensible default logging style\n\nInstall either from this repository, or\
+    \ with pip::\n\n    pip install climate\n\nDocumentation for the package is at http://pythonhosted.org/climate.\n\nUsage\n-----\n\nAt its most basic, just import the module into your script and use\
+    \ it to call\nyour main function::\n\n    import climate\n    import logging\n\n    def main(foo=1, bar='hello'):\n        logging.info('%s %s', foo, bar)\n\n    if __name__ == '__main__':\n       \
+    \ climate.call(main)\n\n``plac`` wrapper\n~~~~~~~~~~~~~~~~\n\nAutomagically, the logging module will be configured for you! If you'd like to\nset the values for ``main`` from the command-line, just\
+    \ include an annotation (a\nstraight wrapper over ``plac`` functionality)::\n\n    import climate\n    import logging\n\n    @climate.annotate(\n        foo=('value to use', 'option', None, int),\n\
+    \        bar=('greeting to offer', 'option'),\n    )\n    def main(foo=1, bar='hello'):\n        logging.info('%s %s', foo, bar)\n\n    if __name__ == '__main__':\n        climate.call(main)\n\n``argparse``\
+    \ wrapper\n~~~~~~~~~~~~~~~~~~~~\n\nFinally, if you prefer using slightly more heavy-weight command line arguments,\n``climate`` provides some convenience wrappers for you::\n\n    import climate\n \
+    \   import logging\n\n    g = climate.add_group('Foo')\n    g.add_argument('-a', '--alfred', type=int, default=2, help='ALFRED!')\n    g.add_argument('-b', '--betty', type=int, default=3, help='BETTY!')\n\
+    \n    def main(args):\n        logging.info('%s %s', args.alfred, args.betty)\n\n    if __name__ == '__main__':\n        climate.call(main)\n\nThen, as with using the ``plac`` wrapper, calling your\
+    \ script with ``-h`` or\n``--help`` will give you command-line usage help for free! The usage in this\ncase will include a summary of the default value for each argument.\n\nUnfortunately, at the moment\
+    \ if you mix the ``plac`` wrapper with the\n``argparse`` one, then confusing things happen. Just use one or the other. My\nrecommendation is to use the ``plac`` wrapper for one-off scripts, and the\n\
+    ``argparse`` wrapper for anything that's likely to be turned into a library.\n\nArgument files\n~~~~~~~~~~~~~~\n\nIf you're using the ``argparse`` wrapper, ``climate`` allows you to load\ncommand-line\
+    \ arguments from a file, using the ``@filename`` command-line\nsyntax::\n\n    python biochem-experiment.py --alfred 201 @experiment-01.args\n\nInside the argument file, lines starting with ``--`` are\
+    \ automatically split\ninto multiple options, and lines not starting with ``--`` are treated as a\nsingle option. In addition, Python-style (aka shell-style) comments are ignored,\nso you can keep your\
+    \ command-line arguments annotated with comments as needed.\n\nIf you need to include a literal hash ``#`` character in your options for some\nreason, just escape the hash by prefixing it with a backslash::\n\
+    \n    --flavor raspberry\n    --color \\#f39\n\nLicense\n-------\n\nThe contents of ``log.py`` were mostly written by Bryan Silverthorn\n<bsilvert@cs.utexas.edu> as part of the utcondor_ package.\n\n\
+    The other files are covered by the MIT license.\n\n.. _utcondor: http://github.com/bsilvert/utcondor"
+  license: MIT License
+  license_family: MIT
+  summary: Command-line utilities
+  home: http://github.com/lmjohns3/py-cli/
+  license_file: ''
+  doc_url: ''
+
+extra:
+  recipe-maintainers: ''
