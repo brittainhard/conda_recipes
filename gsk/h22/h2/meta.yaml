@@ -1,0 +1,195 @@
+{% set name = "h2" %}
+{% set version = "2.4.2" %}
+{% set hash_type = "sha256" %}
+{% set hash_value = "e47d8e32d35e5678be7c49bbb3ce3d335dd4e22954292b6f3370a64f8b820284" %}
+
+package:
+  version: '{{ version }}'
+  name: '{{ name|lower }}'
+
+source:
+  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+  '{{ hash_type }}': '{{ hash_value }}'
+  fn: '{{ name }}-{{ version }}.tar.gz'
+
+build:
+  number: 0
+  script: python setup.py install  --single-version-externally-managed --record=record.txt
+
+requirements:
+  run:
+    - python
+    - hyperframe >=3.1,<5,!=4.0.0
+    - hpack >=2.2,<3
+  build:
+    - python
+    - setuptools
+    - hyperframe >=3.1,<5,!=4.0.0
+    - hpack >=2.2,<3
+
+test:
+  imports:
+    - h2
+
+about:
+  dev_url: ''
+  description: "===============================\nhyper-h2: HTTP/2 Protocol Stack\n===============================\n\n.. image:: https://raw.github.com/Lukasa/hyper/development/docs/source/images/hyper.png\n\
+    \n.. image:: https://travis-ci.org/python-hyper/hyper-h2.svg?branch=master\n    :target: https://travis-ci.org/python-hyper/hyper-h2\n\nThis repository contains a pure-Python implementation of a HTTP/2\
+    \ protocol\nstack. It's written from the ground up to be embeddable in whatever program you\nchoose to use, ensuring that you can speak HTTP/2 regardless of your\nprogramming paradigm.\n\nYou use it\
+    \ like this:\n\n.. code-block:: python\n\n    import h2.connection\n\n    conn = h2.connection.H2Connection()\n    conn.send_headers(stream_id=stream_id, headers=headers)\n    conn.send_data(stream_id,\
+    \ data)\n    socket.sendall(conn.data_to_send())\n    events = conn.receive_data(socket_data)\n\nThis repository does not provide a parsing layer, a network layer, or any rules\nabout concurrency. Instead,\
+    \ it's a purely in-memory solution, defined in terms\nof data actions and HTTP/2 frames. This is one building block of a full Python\nHTTP implementation.\n\nTo install it, just run:\n\n.. code-block::\
+    \ console\n\n    $ pip install h2\n\nDocumentation\n=============\n\nDocumentation is available at http://python-hyper.org/h2/.\n\nContributing\n============\n\n``hyper-h2`` welcomes contributions from\
+    \ anyone! Unlike many other projects we\nare happy to accept cosmetic contributions and small contributions, in addition\nto large feature requests and changes.\n\nBefore you contribute (either by opening\
+    \ an issue or filing a pull request),\nplease `read the contribution guidelines`_.\n\n.. _read the contribution guidelines: http://python-hyper.org/en/latest/contributing.html\n\nLicense\n=======\n\n\
+    ``hyper-h2`` is made available under the MIT License. For more details, see the\n``LICENSE`` file in the repository.\n\nAuthors\n=======\n\n``hyper-h2`` is maintained by Cory Benfield, with contributions\
+    \ from others. For\nmore details about the contributors, please see ``CONTRIBUTORS.rst``.\n\n\nRelease History\n===============\n\n3.0.1 (2017-04-03)\n------------------\n\nBugfixes\n~~~~~~~~\n\n- CONTINUATION\
+    \ frames sent on closed streams previously caused stream errors\n  of type STREAM_CLOSED. RFC 7540 \xA7 6.10 requires that these be connection\n  errors of type PROTOCOL_ERROR, and so this release changes\
+    \ to match that\n  behaviour.\n- Remote peers incrementing their inbound connection window beyond the maximum\n  allowed value now cause stream-level errors, rather than connection-level\n  errors,\
+    \ allowing connections to stay up longer.\n- h2 now rejects receiving and sending request header blocks that are missing\n  any of the mandatory pseudo-header fields (:path, :scheme, and :method).\n\
+      - h2 now rejects receiving and sending request header blocks that have an empty\n  :path pseudo-header value.\n- h2 now rejects receiving and sending request header blocks that contain\n  response-only\
+    \ pseudo-headers, and vice versa.\n- h2 now correct respects user-initiated changes to the HEADER_TABLE_SIZE\n  local setting, and ensures that if users shrink or increase the header\n  table size it\
+    \ is policed appropriately.\n\n\n2.6.2 (2017-04-03)\n------------------\n\nBugfixes\n~~~~~~~~\n\n- CONTINUATION frames sent on closed streams previously caused stream errors\n  of type STREAM_CLOSED.\
+    \ RFC 7540 \xA7 6.10 requires that these be connection\n  errors of type PROTOCOL_ERROR, and so this release changes to match that\n  behaviour.\n- Remote peers incrementing their inbound connection\
+    \ window beyond the maximum\n  allowed value now cause stream-level errors, rather than connection-level\n  errors, allowing connections to stay up longer.\n- h2 now rejects receiving and sending request\
+    \ header blocks that are missing\n  any of the mandatory pseudo-header fields (:path, :scheme, and :method).\n- h2 now rejects receiving and sending request header blocks that have an empty\n  :path\
+    \ pseudo-header value.\n- h2 now rejects receiving and sending request header blocks that contain\n  response-only pseudo-headers, and vice versa.\n- h2 now correct respects user-initiated changes to\
+    \ the HEADER_TABLE_SIZE\n  local setting, and ensures that if users shrink or increase the header\n  table size it is policed appropriately.\n\n\n2.5.4 (2017-04-03)\n------------------\n\nBugfixes\n\
+    ~~~~~~~~\n\n- CONTINUATION frames sent on closed streams previously caused stream errors\n  of type STREAM_CLOSED. RFC 7540 \xA7 6.10 requires that these be connection\n  errors of type PROTOCOL_ERROR,\
+    \ and so this release changes to match that\n  behaviour.\n- Remote peers incrementing their inbound connection window beyond the maximum\n  allowed value now cause stream-level errors, rather than\
+    \ connection-level\n  errors, allowing connections to stay up longer.\n- h2 now correct respects user-initiated changes to the HEADER_TABLE_SIZE\n  local setting, and ensures that if users shrink or\
+    \ increase the header\n  table size it is policed appropriately.\n\n\n3.0.0 (2017-03-24)\n------------------\n\nAPI Changes (Backward-Incompatible)\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\n- By default,\
+    \ hyper-h2 now joins together received cookie header fields, per\n  RFC 7540 Section 8.1.2.5.\n- Added a ``normalize_inbound_headers`` flag to the ``H2Configuration`` object\n  that defaults to ``True``.\
+    \ Setting this to ``False`` changes the behaviour\n  from the previous point back to the v2 behaviour.\n- Removed deprecated fields from ``h2.errors`` module.\n- Removed deprecated fields from ``h2.settings``\
+    \ module.\n- Removed deprecated ``client_side`` and ``header_encoding`` arguments from\n  ``H2Connection``.\n- Removed deprecated ``client_side`` and ``header_encoding`` properties from\n  ``H2Connection``.\n\
+      - ``dict`` objects are no longer allowed for user-supplied headers.\n- The default header encoding is now ``None``, not ``utf-8``: this means that\n  all events that carry headers now return those headers\
+    \ as byte strings by\n  default. The header encoding can be set back to ``utf-8`` to restore the old\n  behaviour.\n\nAPI Changes (Backward-Compatible)\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\n- Added\
+    \ new ``UnknownFrameReceived`` event that fires when unknown extension\n  frames have been received. This only fires when using hyperframe 5.0 or\n  later: earlier versions of hyperframe cause us to\
+    \ silently ignore extension\n  frames.\n\nBugfixes\n~~~~~~~~\n\nNone\n\n\n2.6.1 (2017-03-16)\n------------------\n\nBugfixes\n~~~~~~~~\n\n- Allowed hyperframe v5 support while continuing to ignore unexpected\
+    \ frames.\n\n\n2.5.3 (2017-03-16)\n------------------\n\nBugfixes\n~~~~~~~~\n\n- Allowed hyperframe v5 support while continuing to ignore unexpected frames.\n\n\n2.4.4 (2017-03-16)\n------------------\n\
+    \nBugfixes\n~~~~~~~~\n\n- Allowed hyperframe v5 support while continuing to ignore unexpected frames.\n\n\n2.6.0 (2017-02-28)\n------------------\n\nAPI Changes (Backward-Compatible)\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\
+    \n- Added a new ``h2.events.Event`` class that acts as a base class for all\n  events.\n- Rather than reject outbound Connection-specific headers, h2 will now\n  normalize the header block by removing\
+    \ them.\n- Implement equality for the ``h2.settings.Settings`` class.\n- Added ``h2.settings.SettingCodes``, an enum that is used to store all the\n  HTTP/2 setting codes. This allows us to use a better\
+    \ printed representation of\n  the setting code in most places that it is used.\n- The ``setting`` field in ``ChangedSetting`` for the ``RemoteSettingsChanged``\n  and ``SettingsAcknowledged`` events\
+    \ has been updated to be instances of\n  ``SettingCodes`` whenever they correspond to a known setting code. When they\n  are an unknown setting code, they are instead ``int``. As ``SettingCodes`` is\n\
+    \  a subclass of ``int``, this is non-breaking.\n- Deprecated the other fields in ``h2.settings``. These will be removed in\n  3.0.0.\n- Added an optional ``pad_length`` parameter to ``H2Connection.send_data``\n\
+    \  to allow the user to include padding on a data frame.\n- Added a new parameter to the ``h2.config.H2Configuration`` initializer which\n  takes a logger.  This allows us to log by providing a logger\
+    \ that conforms\n  to the requirements of this module so that it can be used in different\n  environments.\n\nBugfixes\n~~~~~~~~\n\n- Correctly reject pushed request header blocks whenever they have\
+    \ malformed\n  request header blocks.\n- Correctly normalize pushed request header blocks whenever they have\n  normalizable header fields.\n- Remote peers are now allowed to send zero or any positive\
+    \ number as a value\n  for ``SETTINGS_MAX_HEADER_LIST_SIZE``, where previously sending zero would\n  raise a ``InvalidSettingsValueError``.\n- Resolved issue where the ``HTTP2-Settings`` header value\
+    \ for plaintext\n  upgrade that was emitted by ``initiate_upgrade_connection`` included the\n  *entire* ``SETTINGS`` frame, instead of just the payload.\n- Resolved issue where the ``HTTP2-Settings``\
+    \ header value sent by a client for\n  plaintext upgrade would be ignored by ``initiate_upgrade_connection``, rather\n  than have those settings applied appropriately.\n- Resolved an issue whereby certain\
+    \ frames received from a peer in the CLOSED\n  state would trigger connection errors when RFC 7540 says they should have\n  triggered stream errors instead. Added more detailed stream closure tracking\n\
+    \  to ensure we don't throw away connections unnecessarily.\n\n\n2.5.2 (2017-01-27)\n------------------\n\n- Resolved issue where the ``HTTP2-Settings`` header value for plaintext\n  upgrade that was\
+    \ emitted by ``initiate_upgrade_connection`` included the\n  *entire* ``SETTINGS`` frame, instead of just the payload.\n- Resolved issue where the ``HTTP2-Settings`` header value sent by a client for\n\
+    \  plaintext upgrade would be ignored by ``initiate_upgrade_connection``, rather\n  than have those settings applied appropriately.\n\n\n2.4.3 (2017-01-27)\n------------------\n\n- Resolved issue where\
+    \ the ``HTTP2-Settings`` header value for plaintext\n  upgrade that was emitted by ``initiate_upgrade_connection`` included the\n  *entire* ``SETTINGS`` frame, instead of just the payload.\n- Resolved\
+    \ issue where the ``HTTP2-Settings`` header value sent by a client for\n  plaintext upgrade would be ignored by ``initiate_upgrade_connection``, rather\n  than have those settings applied appropriately.\n\
+    \n\n2.3.4 (2017-01-27)\n------------------\n\n- Resolved issue where the ``HTTP2-Settings`` header value for plaintext\n  upgrade that was emitted by ``initiate_upgrade_connection`` included the\n \
+    \ *entire* ``SETTINGS`` frame, instead of just the payload.\n- Resolved issue where the ``HTTP2-Settings`` header value sent by a client for\n  plaintext upgrade would be ignored by ``initiate_upgrade_connection``,\
+    \ rather\n  than have those settings applied appropriately.\n\n\n2.5.1 (2016-12-17)\n------------------\n\nBugfixes\n~~~~~~~~\n\n- Remote peers are now allowed to send zero or any positive number as\
+    \ a value\n  for ``SETTINGS_MAX_HEADER_LIST_SIZE``, where previously sending zero would\n  raise a ``InvalidSettingsValueError``.\n\n\n2.5.0 (2016-10-25)\n------------------\n\nAPI Changes (Backward-Compatible)\n\
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\n- Added a new ``H2Configuration`` object that allows rich configuration of\n  a ``H2Connection``. This object supersedes the prior keyword arguments to the\n  ``H2Connection``\
+    \ object, which are now deprecated and will be removed in 3.0.\n- Added support for automated window management via the\n  ``acknowledge_received_data`` method. See the documentation for more details.\n\
+      - Added a ``DenialOfServiceError`` that is raised whenever a behaviour that\n  looks like a DoS attempt is encountered: for example, an overly large\n  decompressed header list. This is a subclass of\
+    \ ``ProtocolError``.\n- Added support for setting and managing ``SETTINGS_MAX_HEADER_LIST_SIZE``.\n  This setting is now defaulted to 64kB.\n- Added ``h2.errors.ErrorCodes``, an enum that is used to\
+    \ store all the HTTP/2\n  error codes. This allows us to use a better printed representation of the\n  error code in most places that it is used.\n- The ``error_code`` fields on ``ConnectionTerminated``\
+    \ and ``StreamReset``\n  events have been updated to be instances of ``ErrorCodes`` whenever they\n  correspond to a known error code. When they are an unknown error code, they\n  are instead ``int``.\
+    \ As ``ErrorCodes`` is a subclass of ``int``, this is\n  non-breaking.\n- Deprecated the other fields in ``h2.errors``. These will be removed in 3.0.0.\n\nBugfixes\n~~~~~~~~\n\n- Correctly reject request\
+    \ header blocks with neither :authority nor Host\n  headers, or header blocks which contain mismatched :authority and Host\n  headers, per RFC 7540 Section 8.1.2.3.\n- Correctly expect that responses\
+    \ to HEAD requests will have no body regardless\n  of the value of the Content-Length header, and reject those that do.\n- Correctly refuse to send header blocks that contain neither :authority nor\n\
+    \  Host headers, or header blocks which contain mismatched :authority and Host\n  headers, per RFC 7540 Section 8.1.2.3.\n- Hyper-h2 will now reject header field names and values that contain leading\n\
+    \  or trailing whitespace.\n- Correctly strip leading/trailing whitespace from header field names and\n  values.\n- Correctly refuse to send header blocks with a TE header whose value is not\n  ``trailers``,\
+    \ per RFC 7540 Section 8.1.2.2.\n- Correctly refuse to send header blocks with connection-specific headers,\n  per RFC 7540 Section 8.1.2.2.\n- Correctly refuse to send header blocks that contain duplicate\
+    \ pseudo-header\n  fields, or with pseudo-header fields that appear after ordinary header fields,\n  per RFC 7540 Section 8.1.2.1.\n\n  This may cause passing a dictionary as the header block to ``send_headers``\n\
+    \  to throw a ``ProtocolError``, because dictionaries are unordered and so they\n  may trip this check.  Passing dictionaries here is deprecated, and callers\n  should change to using a sequence of\
+    \ 2-tuples as their header blocks.\n- Correctly reject trailers that contain HTTP/2 pseudo-header fields, per RFC\n  7540 Section 8.1.2.1.\n- Correctly refuse to send trailers that contain HTTP/2 pseudo-header\
+    \ fields,\n  per RFC 7540 Section 8.1.2.1.\n- Correctly reject responses that do not contain the ``:status`` header field,\n  per RFC 7540 Section 8.1.2.4.\n- Correctly refuse to send responses that\
+    \ do not contain the ``:status`` header\n  field, per RFC 7540 Section 8.1.2.4.\n- Correctly update the maximum frame size when the user updates the value of\n  that setting. Prior to this release,\
+    \ if the user updated the maximum frame\n  size hyper-h2 would ignore the update, preventing the remote peer from using\n  the higher frame sizes.\n\n2.4.2 (2016-10-25)\n------------------\n\nBugfixes\n\
+    ~~~~~~~~\n\n- Correctly update the maximum frame size when the user updates the value of\n  that setting. Prior to this release, if the user updated the maximum frame\n  size hyper-h2 would ignore the\
+    \ update, preventing the remote peer from using\n  the higher frame sizes.\n\n2.3.3 (2016-10-25)\n------------------\n\nBugfixes\n~~~~~~~~\n\n- Correctly update the maximum frame size when the user\
+    \ updates the value of\n  that setting. Prior to this release, if the user updated the maximum frame\n  size hyper-h2 would ignore the update, preventing the remote peer from using\n  the higher frame\
+    \ sizes.\n\n2.2.7 (2016-10-25)\n------------------\n\n*Final 2.2.X release*\n\nBugfixes\n~~~~~~~~\n\n- Correctly update the maximum frame size when the user updates the value of\n  that setting. Prior\
+    \ to this release, if the user updated the maximum frame\n  size hyper-h2 would ignore the update, preventing the remote peer from using\n  the higher frame sizes.\n\n2.4.1 (2016-08-23)\n------------------\n\
+    \nBugfixes\n~~~~~~~~\n\n- Correctly expect that responses to HEAD requests will have no body regardless\n  of the value of the Content-Length header, and reject those that do.\n\n2.3.2 (2016-08-23)\n\
+    ------------------\n\nBugfixes\n~~~~~~~~\n\n- Correctly expect that responses to HEAD requests will have no body regardless\n  of the value of the Content-Length header, and reject those that do.\n\n\
+    2.4.0 (2016-07-01)\n------------------\n\nAPI Changes (Backward-Compatible)\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\n- Adds ``additional_data`` to ``H2Connection.close_connection``, allowing the\n  user\
+    \ to send additional debug data on the GOAWAY frame.\n- Adds ``last_stream_id`` to ``H2Connection.close_connection``, allowing the\n  user to manually control what the reported last stream ID is.\n\
+      - Add new method: ``prioritize``.\n- Add support for emitting stream priority information when sending headers\n  frames using three new keyword arguments: ``priority_weight``,\n  ``priority_depends_on``,\
+    \ and ``priority_exclusive``.\n- Add support for \"related events\": events that fire simultaneously on a single\n  frame.\n\n\n2.3.1 (2016-05-12)\n------------------\n\nBugfixes\n~~~~~~~~\n\n- Resolved\
+    \ ``AttributeError`` encountered when receiving more than one sequence\n  of CONTINUATION frames on a given connection.\n\n\n2.2.5 (2016-05-12)\n------------------\n\nBugfixes\n~~~~~~~~\n\n- Resolved\
+    \ ``AttributeError`` encountered when receiving more than one sequence\n  of CONTINUATION frames on a given connection.\n\n\n2.3.0 (2016-04-26)\n------------------\n\nAPI Changes (Backward-Compatible)\n\
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\n- Added a new flag to the ``H2Connection`` constructor: ``header_encoding``,\n  that controls what encoding is used (if any) to decode the headers from bytes\n \
+    \ to unicode. This defaults to UTF-8 for backward compatibility. To disable the\n  decode and use bytes exclusively, set the field to False, None, or the empty\n  string. This affects all headers, including\
+    \ those pushed by servers.\n- Bumped the minimum version of HPACK allowed from 2.0 to 2.2.\n- Added support for advertising RFC 7838 Alternative services.\n- Allowed users to provide ``hpack.HeaderTuple``\
+    \ and\n  ``hpack.NeverIndexedHeaderTuple`` objects to all methods that send headers.\n- Changed all events that carry headers to emit ``hpack.HeaderTuple`` and\n  ``hpack.NeverIndexedHeaderTuple`` instead\
+    \ of plain tuples. This allows users\n  to maintain header indexing state.\n- Added support for plaintext upgrade with the ``initiate_upgrade_connection``\n  method.\n\nBugfixes\n~~~~~~~~\n\n- Automatically\
+    \ ensure that all ``Authorization`` and ``Proxy-Authorization``\n  headers, as well as short ``Cookie`` headers, are prevented from being added\n  to encoding contexts.\n\n2.2.4 (2016-04-25)\n------------------\n\
+    \nBugfixes\n~~~~~~~~\n\n- Correctly forbid pseudo-headers that were not defined in RFC 7540.\n- Ignore AltSvc frames, rather than exploding when receiving them.\n\n2.1.5 (2016-04-25)\n------------------\n\
+    \n*Final 2.1.X release*\n\nBugfixes\n~~~~~~~~\n\n- Correctly forbid pseudo-headers that were not defined in RFC 7540.\n- Ignore AltSvc frames, rather than exploding when receiving them.\n\n2.2.3 (2016-04-13)\n\
+    ------------------\n\nBugfixes\n~~~~~~~~\n\n- Allowed the 4.X series of hyperframe releases as dependencies.\n\n2.1.4 (2016-04-13)\n------------------\n\nBugfixes\n~~~~~~~~\n\n- Allowed the 4.X series\
+    \ of hyperframe releases as dependencies.\n\n\n2.2.2 (2016-04-05)\n------------------\n\nBugfixes\n~~~~~~~~\n\n- Fixed issue where informational responses were erroneously not allowed to be\n  sent\
+    \ in the ``HALF_CLOSED_REMOTE`` state.\n- Fixed issue where informational responses were erroneously not allowed to be\n  received in the ``HALF_CLOSED_LOCAL`` state.\n- Fixed issue where we allowed\
+    \ information responses to be sent or received\n  after final responses.\n\n2.2.1 (2016-03-23)\n------------------\n\nBugfixes\n~~~~~~~~\n\n- Fixed issue where users using locales that did not default\
+    \ to UTF-8 were\n  unable to install source distributions of the package.\n\n2.2.0 (2016-03-23)\n------------------\n\nAPI Changes (Backward-Compatible)\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\n- Added\
+    \ support for sending informational responses (responses with 1XX status)\n  codes as part of the standard flow. HTTP/2 allows zero or more informational\n  responses with no upper limit: hyper-h2 does\
+    \ too.\n- Added support for receiving informational responses (responses with 1XX\n  status) codes as part of the standard flow. HTTP/2 allows zero or more\n  informational responses with no upper limit:\
+    \ hyper-h2 does too.\n- Added a new event: ``ReceivedInformationalResponse``. This response is fired\n  when informational responses (those with 1XX status codes).\n- Added an ``additional_data`` field\
+    \ to the ``ConnectionTerminated`` event that\n  carries any additional data sent on the GOAWAY frame. May be ``None`` if no\n  such data was sent.\n- Added the ``initial_values`` optional argument to\
+    \ the ``Settings`` object.\n\nBugfixes\n~~~~~~~~\n\n- Correctly reject all of the connection-specific headers mentioned in RFC 7540\n  \xA7 8.1.2.2, not just the ``Connection:`` header.\n- Defaulted\
+    \ the value of ``SETTINGS_MAX_CONCURRENT_STREAMS`` to 100, unless\n  explicitly overridden. This is a safe defensive initial value for this\n  setting.\n\n2.1.3 (2016-03-16)\n------------------\n\n\
+    Deprecations\n~~~~~~~~~~~~\n\n- Passing dictionaries to ``send_headers`` as the header block is deprecated,\n  and will be removed in 3.0.\n\n2.1.2 (2016-02-17)\n------------------\n\nBugfixes\n~~~~~~~~\n\
+    \n- Reject attempts to push streams on streams that were themselves pushed:\n  streams can only be pushed on streams that were initiated by the client.\n- Correctly allow CONTINUATION frames to extend\
+    \ the header block started by a\n  PUSH_PROMISE frame.\n- Changed our handling of frames received on streams that were reset by the\n  user.\n\n  Previously these would, at best, cause ProtocolErrors\
+    \ to be raised and the\n  connection to be torn down (rather defeating the point of resetting streams\n  at all) and, at worst, would cause subtle inconsistencies in state between\n  hyper-h2 and the\
+    \ remote peer that could lead to header block decoding errors\n  or flow control blockages.\n\n  Now when the user resets a stream all further frames received on that stream\n  are ignored except where\
+    \ they affect some form of connection-level state,\n  where they have their effect and are then ignored.\n- Fixed a bug whereby receiving a PUSH_PROMISE frame on a stream that was\n  closed would cause\
+    \ a RST_STREAM frame to be emitted on the closed-stream,\n  but not the newly-pushed one. Now this causes a ``ProtocolError``.\n\n2.1.1 (2016-02-05)\n------------------\n\nBugfixes\n~~~~~~~~\n\n- Added\
+    \ debug representations for all events.\n- Fixed problems with setup.py that caused trouble on older setuptools/pip\n  installs.\n\n2.1.0 (2016-02-02)\n------------------\n\nAPI Changes (Backward-Compatible)\n\
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\n- Added new field to ``DataReceived``: ``flow_controlled_length``. This is the\n  length of the frame including padded data, allowing users to correctly track\n\
+    \  changes to the flow control window.\n- Defined new ``UnsupportedFrameError``, thrown when frames that are known to\n  hyperframe but not supported by hyper-h2 are received. For\n  backward-compatibility\
+    \ reasons, this is a ``ProtocolError`` *and* a\n  ``KeyError``.\n\nBugfixes\n~~~~~~~~\n\n- Hyper-h2 now correctly accounts for padding when maintaining flow control\n  windows.\n- Resolved a bug where\
+    \ hyper-h2 would mistakenly apply\n  SETTINGS_INITIAL_WINDOW_SIZE to the connection flow control window in\n  addition to the stream-level flow control windows.\n- Invalid Content-Length headers now\
+    \ throw ``ProtocolError`` exceptions and\n  correctly tear the connection down, instead of leaving the connection in an\n  indeterminate state.\n- Invalid header blocks now throw ``ProtocolError``,\
+    \ rather than a grab bag of\n  possible other exceptions.\n\n2.0.0 (2016-01-25)\n------------------\n\nAPI Changes (Breaking)\n~~~~~~~~~~~~~~~~~~~~~~\n\n- Attempts to open streams with invalid stream\
+    \ IDs, either by the remote peer\n  or by the user, are now rejected as a ``ProtocolError``. Previously these\n  were allowed, and would cause remote peers to error.\n- Receiving frames that have invalid\
+    \ padding now causes the connection to be\n  terminated with a ``ProtocolError`` being raised. Previously these passed\n  undetected.\n- Settings values set by both the user and the remote peer are\
+    \ now validated\n  when they're set. If they're invalid, a new ``InvalidSettingsValueError`` is\n  raised and, if set by the remote peer, a connection error is signaled.\n  Previously, it was possible\
+    \ to set invalid values. These would either be\n  caught when building frames, or would be allowed to stand.\n- Settings changes no longer require user action to be acknowledged: hyper-h2\n  acknowledges\
+    \ them automatically. This moves the location where some\n  exceptions may be thrown, and also causes the ``acknowledge_settings`` method\n  to be removed from the public API.\n- Removed a number of\
+    \ methods on the ``H2Connection`` object from the public,\n  semantically versioned API, by renaming them to have leading underscores.\n  Specifically, removed:\n\n    - ``get_stream_by_id``\n    -\
+    \ ``get_or_create_stream``\n    - ``begin_new_stream``\n    - ``receive_frame``\n    - ``acknowledge_settings``\n\n- Added full support for receiving CONTINUATION frames, including policing\n  logic\
+    \ about when and how they are received. Previously, receiving\n  CONTINUATION frames was not supported and would throw exceptions.\n- All public API functions on ``H2Connection`` except for ``receive_data``\
+    \ no\n  longer return lists of events, because these lists were always empty. Events\n  are now only raised by ``receive_data``.\n- Calls to ``increment_flow_control_window`` with out of range values\
+    \ now raise\n  ``ValueError`` exceptions. Previously they would be allowed, or would cause\n  errors when serializing frames.\n\nAPI Changes (Backward-Compatible)\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\
+    \n- Added ``PriorityUpdated`` event for signaling priority changes.\n- Added ``get_next_available_stream_id`` function.\n- Receiving DATA frames on streams not in the OPEN or HALF_CLOSED_LOCAL states\n\
+    \  now causes a stream reset, rather than a connection reset. The error is now\n  also classified as a ``StreamClosedError``, rather than a more generic\n  ``ProtocolError``.\n- Receiving HEADERS or\
+    \ PUSH_PROMISE frames in the HALF_CLOSED_REMOTE state now\n  causes a stream reset, rather than a connection reset.\n- Receiving frames that violate the max frame size now causes connection errors\n\
+    \  with error code FRAME_SIZE_ERROR, not a generic PROTOCOL_ERROR. This\n  condition now also raises a ``FrameTooLargeError``, a new subclass of\n  ``ProtocolError``.\n- Made ``NoSuchStreamError`` a\
+    \ subclass of ``ProtocolError``.\n- The ``StreamReset`` event is now also fired whenever a protocol error from\n  the remote peer forces a stream to close early. This is only fired once.\n- The ``StreamReset``\
+    \ event now carries a flag, ``remote_reset``, that is set\n  to ``True`` in all cases where ``StreamReset`` would previously have fired\n  (e.g. when the remote peer sent a RST_STREAM), and is set to\
+    \ ``False`` when\n  it fires because the remote peer made a protocol error.\n- Hyper-h2 now rejects attempts by peers to increment a flow control window by\n  zero bytes.\n- Hyper-h2 now rejects peers\
+    \ sending header blocks that are ill-formed for a\n  number of reasons as set out in RFC 7540 Section 8.1.2.\n- Attempting to send non-PRIORITY frames on closed streams now raises\n  ``StreamClosedError``.\n\
+      - Remote peers attempting to increase the flow control window beyond\n  ``2**31 - 1``, either by window increment or by settings frame, are now\n  rejected as ``ProtocolError``.\n- Local attempts to\
+    \ increase the flow control window beyond ``2**31 - 1`` by\n  window increment are now rejected as ``ProtocolError``.\n- The bytes that represent individual settings are now available in\n  ``h2.settings``,\
+    \ instead of needing users to import them from hyperframe.\n\nBugfixes\n~~~~~~~~\n\n- RFC 7540 requires that a separate minimum stream ID be used for inbound and\n  outbound streams. Hyper-h2 now obeys\
+    \ this requirement.\n- Hyper-h2 now does a better job of reporting the last stream ID it has\n  partially handled when terminating connections.\n- Fixed an error in the arguments of ``StreamIDTooLowError``.\n\
+      - Prevent ``ValueError`` leaking from Hyperframe.\n- Prevent ``struct.error`` and ``InvalidFrameError`` leaking from Hyperframe.\n\n1.1.1 (2015-11-17)\n------------------\n\nBugfixes\n~~~~~~~~\n\n-\
+    \ Forcibly lowercase all header names to improve compatibility with\n  implementations that demand lower-case header names.\n\n1.1.0 (2015-10-28)\n------------------\n\nAPI Changes (Backward-Compatible)\n\
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\n- Added a new ``ConnectionTerminated`` event, which fires when GOAWAY frames\n  are received.\n- Added a subclass of ``NoSuchStreamError``, called ``StreamClosedError``,\
+    \ that\n  fires when actions are taken on a stream that is closed and has had its state\n  flushed from the system.\n- Added ``StreamIDTooLowError``, raised when the user or the remote peer\n  attempts\
+    \ to create a stream with an ID lower than one previously used in the\n  dialog. Inherits from ``ValueError`` for backward-compatibility reasons.\n\nBugfixes\n~~~~~~~~\n\n- Do not throw ``ProtocolError``\
+    \ when attempting to send multiple GOAWAY\n  frames on one connection.\n- We no longer forcefully change the decoder table size when settings changes\n  are ACKed, instead waiting for remote acknowledgement\
+    \ of the change.\n- Improve the performance of checking whether a stream is open.\n- We now attempt to lazily garbage collect closed streams, to avoid having the\n  state hang around indefinitely, leaking\
+    \ memory.\n- Avoid further per-stream allocations, leading to substantial performance\n  improvements when many short-lived streams are used.\n\n1.0.0 (2015-10-15)\n------------------\n\n- First production\
+    \ release!\n\n\n"
+  license: MIT License
+  license_family: MIT
+  summary: HTTP/2 State-Machine based protocol implementation
+  home: http://hyper.rtfd.org
+  license_file: ''
+  doc_url: ''
+
+extra:
+  recipe-maintainers: ''

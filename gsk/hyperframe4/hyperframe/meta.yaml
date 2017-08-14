@@ -1,0 +1,72 @@
+{% set name = "hyperframe" %}
+{% set version = "4.0.2" %}
+{% set hash_type = "sha256" %}
+{% set hash_value = "12e0336997f564135ff5e1a3c667fad6fa2e8faa3ba7397352dabb2fc1871033" %}
+
+package:
+  version: '{{ version }}'
+  name: '{{ name|lower }}'
+
+source:
+  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+  '{{ hash_type }}': '{{ hash_value }}'
+  fn: '{{ name }}-{{ version }}.tar.gz'
+
+build:
+  number: 0
+  script: python setup.py install  --single-version-externally-managed --record=record.txt
+
+requirements:
+  run:
+    - python
+  build:
+    - python
+    - setuptools
+
+test:
+  imports:
+    - hyperframe
+
+about:
+  dev_url: ''
+  description: "======================================\nhyperframe: Pure-Python HTTP/2 framing\n======================================\n\n.. image:: https://travis-ci.org/python-hyper/hyperframe.png?branch=master\n\
+    \    :target: https://travis-ci.org/python-hyper/hyperframe\n\nThis library contains the HTTP/2 framing code used in the `hyper`_ project. It\nprovides a pure-Python codebase that is capable of decoding\
+    \ a binary stream\ninto HTTP/2 frames.\n\nThis library is used directly by `hyper`_ and a number of other projects to\nprovide HTTP/2 frame decoding logic.\n\nContributing\n============\n\nhyperframe\
+    \ welcomes contributions from anyone! Unlike many other projects we\nare happy to accept cosmetic contributions and small contributions, in addition\nto large feature requests and changes.\n\nBefore\
+    \ you contribute (either by opening an issue or filing a pull request),\nplease `read the contribution guidelines`_.\n\n.. _read the contribution guidelines: http://hyper.readthedocs.org/en/development/contributing.html\n\
+    \nLicense\n=======\n\nhyperframe is made available under the MIT License. For more details, see the\n``LICENSE`` file in the repository.\n\nAuthors\n=======\n\nhyperframe is maintained by Cory Benfield,\
+    \ with contributions from others. For\nmore details about the contributors, please see ``CONTRIBUTORS.rst``.\n\n.. _hyper: http://python-hyper.org/\n\n\nRelease History\n===============\n\n6.0.0dev0\n\
+    ---------\n\n5.1.0 (2017-04-24)\n------------------\n\n**API Changes (Backward-compatible)**\n\n- Added support for ``DataFrame.data`` being a ``memoryview`` object.\n\n5.0.0 (2017-03-07)\n------------------\n\
+    \n**Backwards Incompatible API Changes**\n\n- Added support for unknown extension frames. These will be returned in the new\n  ``ExtensionFrame`` object. The flag information for these frames is persisted\n\
+    \  in ``flag_byte`` if needed.\n\n4.0.2 (2017-02-20)\n------------------\n\n**Bugfixes**\n\n- Fixed AltSvc stream association, which was incorrectly set to ``'both'``:\n  should have been ``'either'``.\n\
+      - Fixed a bug where stream IDs on received frames were allowed to be 32-bit,\n  instead of 31-bit.\n- Fixed a bug with frames that had the ``PADDING`` flag set but zero-length\n  padding, whose flow-controlled\
+    \ length was calculated wrongly.\n- Miscellaneous performance improvements to serialization and parsing logic.\n\n4.0.1 (2016-03-13)\n------------------\n\n**Bugfixes**\n\n- Fixed bug with the repr\
+    \ of ``AltSvcFrame``, where building it could throw\n  exceptions if the frame had been received from the network.\n\n4.0.0 (2016-03-13)\n------------------\n\n**Backwards Incompatible API Changes**\n\
+    \n- Updated old ALTSVC frame definition to match the newly specified RFC 7838.\n- Remove BLOCKED frame, which was never actually specified.\n- Removed previously deprecated ``SettingsFrame.SETTINGS_MAX_FRAME_SIZE``\
+    \ and\n  ``SettingsFrame.SETTINGS_MAX_HEADER_LIST_SIZE``.\n\n3.2.0 (2016-02-02)\n------------------\n\n**API Changes (Backward-compatible)**\n\n- Invalid PING frame bodies now raise ``InvalidFrameError``,\
+    \ not\n  ``ValueError``. Note that ``InvalidFrameError`` is a ``ValueError`` subclass.\n- Invalid RST_STREAM frame bodies now raise ``InvalidFramError``, not\n  ``ValueError``. Note that ``InvalidFrameError``\
+    \ is a ``ValueError`` subclass.\n- Canonicalized the names of ``SettingsFrame.SETTINGS_MAX_FRAME_SIZE`` and\n  ``SettingsFrame.SETTINGS_MAX_HEADER_LIST_SIZE`` to match their peers, by\n  adding new\
+    \ properties ``SettingsFrame.MAX_FRAME_SIZE`` and\n  ``SettingsFrame.SETTINGS_MAX_HEADER_LIST_SIZE``. The old names are still\n  present, but will be deprecated in 4.0.0.\n\n**Bugfixes**\n\n- The change\
+    \ in ``3.1.0`` that ensured that ``InvalidFrameError`` would be\n  thrown did not affect certain invalid values in ALT_SVC frames. This has been\n  fixed: ``ValueError`` will no longer be thrown from\
+    \ invalid ALT_SVC bodies.\n\n3.1.1 (2016-01-18)\n------------------\n\n**Bugfixes**\n\n- Correctly error when receiving Ping frames that have insufficient data.\n\n3.1.0 (2016-01-13)\n------------------\n\
+    \n**API Changes**\n\n- Added new ``InvalidFrameError`` that is thrown instead of ``struct.error``\n  when parsing a frame.\n\n**Bugfixes**\n\n- Fixed error when trying to serialize frames that use Priority\
+    \ information\n  with the defaults for that information.\n- Fixed errors when displaying the repr of frames with non-printable bodies.\n\n3.0.1 (2016-01-08)\n------------------\n\n**Bugfixes**\n\n-\
+    \ Fix issue where unpadded DATA, PUSH_PROMISE and HEADERS frames that had empty\n  bodies would raise ``InvalidPaddingError`` exceptions when parsed.\n\n3.0.0 (2016-01-08)\n------------------\n\n**Backwards\
+    \ Incompatible API Changes**\n\n- Parsing padded frames that have invalid padding sizes now throws an\n  ``InvalidPaddingError``.\n\n2.2.0 (2015-10-15)\n------------------\n\n**API Changes**\n\n- When\
+    \ an unknown frame is encountered, ``parse_frame_header`` now throws a\n  ``ValueError`` subclass: ``UnknownFrameError``. This subclass contains the\n  frame type and the length of the frame body.\n\
+    \n2.1.0 (2015-10-06)\n------------------\n\n**API Changes**\n\n- Frames parsed from binary data now carry a ``body_len`` attribute that\n  matches the frame length (minus the frame header).\n\n2.0.0\
+    \ (2015-09-21)\n------------------\n\n**API Changes**\n\n- Attempting to parse unrecognised frames now throws ``ValueError`` instead of\n  ``KeyError``.  Thanks to @Kriechi!\n- Flags are now validated\
+    \ for correctness, preventing setting flags that\n  ``hyperframe`` does not recognise and that would not serialize. Thanks to\n  @mhils!\n- Frame properties can now be initialized in the constructors.\
+    \ Thanks to @mhils\n  and @Kriechi!\n- Frames that cannot be sent on a stream now have their stream ID defaulted\n  to ``0``. Thanks to @Kriechi!\n\n**Other Changes**\n\n- Frames have a more useful\
+    \ repr. Thanks to @mhils!\n\n1.1.1 (2015-07-20)\n------------------\n\n- Fix a bug where ``FRAME_MAX_LEN`` was one byte too small.\n\n1.1.0 (2015-06-28)\n------------------\n\n- Add ``body_len`` property\
+    \ to frames to enable introspection of the actual\n  frame length. Thanks to @jdecuyper!\n\n1.0.1 (2015-06-27)\n------------------\n\n- Fix bug where the frame header would have an incorrect length\
+    \ added to it.\n\n1.0.0 (2015-04-12)\n------------------\n\n- Initial extraction from hyper.\n\n\n"
+  license: MIT License
+  license_family: MIT
+  summary: HTTP/2 framing layer for Python
+  home: http://hyper.rtfd.org
+  license_file: ''
+  doc_url: ''
+
+extra:
+  recipe-maintainers: ''

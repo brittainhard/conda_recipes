@@ -1,0 +1,72 @@
+{% set name = "hpack" %}
+{% set version = "2.3.0" %}
+{% set hash_type = "sha256" %}
+{% set hash_value = "51bd9aa8151efd190d70fe87991b1e3b79be0f93f0e34088fba2a8d34877a0a9" %}
+
+package:
+  version: '{{ version }}'
+  name: '{{ name|lower }}'
+
+source:
+  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+  '{{ hash_type }}': '{{ hash_value }}'
+  fn: '{{ name }}-{{ version }}.tar.gz'
+
+build:
+  number: 0
+  script: python setup.py install  --single-version-externally-managed --record=record.txt
+
+requirements:
+  run:
+    - python
+  build:
+    - python
+    - setuptools
+
+test:
+  imports:
+    - hpack
+
+about:
+  dev_url: ''
+  description: "========================================\nhpack: HTTP/2 Header Encoding for Python\n========================================\n\n.. image:: https://raw.github.com/Lukasa/hyper/development/docs/source/images/hyper.png\n\
+    \n.. image:: https://travis-ci.org/python-hyper/hpack.png?branch=master\n    :target: https://travis-ci.org/python-hyper/hpack\n\nThis module contains a pure-Python HTTP/2 header encoding (HPACK) logic\
+    \ for use\nin Python programs that implement HTTP/2. It also contains a compatibility\nlayer that automatically enables the use of ``nghttp2`` if it's available.\n\nDocumentation\n=============\n\n\
+    Documentation is available at http://python-hyper.org/hpack/.\n\nContributing\n============\n\n``hpack`` welcomes contributions from anyone! Unlike many other projects we are\nhappy to accept cosmetic\
+    \ contributions and small contributions, in addition to\nlarge feature requests and changes.\n\nBefore you contribute (either by opening an issue or filing a pull request),\nplease `read the contribution\
+    \ guidelines`_.\n\n.. _read the contribution guidelines: http://hyper.readthedocs.org/en/development/contributing.html\n\nLicense\n=======\n\n``hpack`` is made available under the MIT License. For more\
+    \ details, see the\n``LICENSE`` file in the repository.\n\nAuthors\n=======\n\n``hpack`` is maintained by Cory Benfield, with contributions from others. For\nmore details about the contributors, please\
+    \ see ``CONTRIBUTORS.rst``.\n\n\nRelease History\n===============\n\n3.0.0 (2017-03-29)\n------------------\n\n**API Changes (Backward Incompatible)**\n\n- Removed nghttp2 support. This support had\
+    \ rotted and was essentially\n  non-functional, so it has now been removed until someone has time to re-add\n  the support in a functional form.\n- Attempts by the encoder to exceed the maximum allowed\
+    \ header table size via\n  dynamic table size updates (or the absence thereof) are now forbidden.\n\n**API Changes (Backward Compatible)**\n\n- Added a new ``InvalidTableSizeError`` thrown when the\
+    \ encoder does not\n  respect the maximum table size set by the user.\n- Added a ``Decoder.max_allowed_table_size`` field that sets the maximum\n  allowed size of the decoder header table. See the documentation\
+    \ for an\n  indication of how this should be used.\n\n**Bugfixes**\n\n- Up to 25% performance improvement decoding HPACK-packed integers, depending\n  on the platform.\n- HPACK now tolerates receiving\
+    \ multiple header table size changes in sequence,\n  rather than only one.\n- HPACK now forbids header table size changes anywhere but first in a header\n  block, as required by RFC 7541 \xA7 4.2.\n\
+      - Other miscellaneous performance improvements.\n\n2.3.0 (2016-08-04)\n------------------\n\n**Security Fixes**\n\n- CVE-2016-6581: HPACK Bomb. This release now enforces a maximum value of the\n  decompressed\
+    \ size of the header list. This is to avoid the so-called \"HPACK\n  Bomb\" vulnerability, which is caused when a malicious peer sends a compressed\n  HPACK body that decompresses to a gigantic header\
+    \ list size.\n\n  This also adds a ``OversizedHeaderListError``, which is thrown by the\n  ``decode`` method if the maximum header list size is being violated. This\n  places the HPACK decoder into\
+    \ a broken state: it must not be used after this\n  exception is thrown.\n\n  This also adds a ``max_header_list_size`` to the ``Decoder`` object. This\n  controls the maximum allowable decompressed\
+    \ size of the header list. By\n  default this is set to 64kB.\n\n2.2.0 (2016-04-20)\n------------------\n\n**API Changes (Backward Compatible)**\n\n- Added ``HeaderTuple`` and ``NeverIndexedHeaderTuple``\
+    \ classes that signal\n  whether a given header field may ever be indexed in HTTP/2 header\n  compression.\n- Changed ``Decoder.decode()`` to return the newly added ``HeaderTuple`` class\n  and subclass.\
+    \ These objects behave like two-tuples, so this change does not\n  break working code.\n\n**Bugfixes**\n\n- Improve Huffman decoding speed by 4x using an approach borrowed from nghttp2.\n- Improve HPACK\
+    \ decoding speed by 10% by caching header table sizes.\n\n2.1.1 (2016-03-16)\n------------------\n\n**Bugfixes**\n\n- When passing a dictionary or dictionary subclass to ``Encoder.encode``, HPACK\n\
+    \  now ensures that HTTP/2 special headers (headers whose names begin with\n  ``:`` characters) appear first in the header block.\n\n2.1.0 (2016-02-02)\n------------------\n\n**API Changes (Backward\
+    \ Compatible)**\n\n- Added new ``InvalidTableIndex`` exception, a subclass of\n  ``HPACKDecodingError``.\n- Instead of throwing ``IndexError`` when encountering invalid encoded integers\n  HPACK now\
+    \ throws ``HPACKDecodingError``.\n- Instead of throwing ``UnicodeDecodeError`` when encountering headers that are\n  not UTF-8 encoded, HPACK now throws ``HPACKDecodingError``.\n- Instead of throwing\
+    \ ``IndexError`` when encountering invalid table offsets,\n  HPACK now throws ``InvalidTableIndex``.\n- Added ``raw`` flag to ``decode``, allowing ``decode`` to return bytes instead\n  of attempting\
+    \ to decode the headers as UTF-8.\n\n**Bugfixes**\n\n- ``memoryview`` objects are now used when decoding HPACK, improving the\n  performance by avoiding unnecessary data copies.\n\n2.0.1 (2015-11-09)\n\
+    ------------------\n\n- Fixed a bug where the Python HPACK implementation would only emit header\n  table size changes for the total change between one header block and another,\n  rather than for the\
+    \ entire sequence of changes.\n\n2.0.0 (2015-10-12)\n------------------\n\n- Remove unused ``HPACKEncodingError``.\n- Add the shortcut ability to import the public API (``Encoder``, ``Decoder``,\n \
+    \ ``HPACKError``, ``HPACKDecodingError``) directly, rather than from\n  ``hpack.hpack``.\n\n1.1.0 (2015-07-07)\n------------------\n\n- Add support for emitting 'never indexed' header fields, by using\
+    \ an optional\n  third element in the header tuple. With thanks to @jimcarreer!\n\n1.0.1 (2015-04-19)\n------------------\n\n- Header fields that have names matching header table entries are now added\
+    \ to\n  the header table. This improves compression efficiency at the cost of\n  slightly more table operations. With thanks to `Tatsuhiro Tsujikawa`_.\n\n.. _Tatsuhiro Tsujikawa: https://github.com/tatsuhiro-t\n\
+    \n1.0.0 (2015-04-13)\n------------------\n\n- Initial fork of the code from `hyper`_.\n\n.. _hyper: https://hyper.readthedocs.org/\n\n\n"
+  license: MIT License
+  license_family: MIT
+  summary: Pure-Python HPACK header compression
+  home: http://hyper.rtfd.org
+  license_file: ''
+  doc_url: ''
+
+extra:
+  recipe-maintainers: ''
