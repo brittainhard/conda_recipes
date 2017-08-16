@@ -1,0 +1,48 @@
+{% set name = "waftools" %}
+{% set version = "0.4.13" %}
+{% set hash_type = "sha256" %}
+{% set hash_val = "42a3d72375eb332cd89465719944bf2c28ac0f8eb0e9c89c84b29fac00481cbe" %}
+
+package:
+  name: {{ name }}
+  version: {{ version }}
+
+source:
+  fn: {{ name }}-{{ version }}.tar.gz
+  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+  {{ hash_type }}: {{ hash_val }}
+
+build:
+  number: 0
+  entry_points:
+    - wafinstall=waftools.wafinstall:main
+  script: wafinstall
+
+requirements:
+  build:
+    - python
+    - pygments
+    - chardet
+    - jinja2
+    - setuptools
+
+  run:
+    - python
+    - pygments
+    - chardet
+    - jinja2
+
+test:
+  imports:
+    - waftools
+
+about:
+  home: https://bitbucket.org/Moo7/waftools
+  license: MIT License
+  license_family: MIT
+  license_file: LICENSE
+  summary: 'This package contains a collection of tools for the waf build environment intended for both native- as well cross compilation of C/C++ based projects.'
+
+extra:
+  recipe-maintainers:
+    - brittainhard
