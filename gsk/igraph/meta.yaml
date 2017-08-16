@@ -22,8 +22,6 @@ build:
 
 requirements:
   build:
-    - gcc
-    # - g++
     - toolchain
     - gmp >=5.0.1,<7
     - libxml2 2.9.*
