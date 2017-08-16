@@ -1,0 +1,44 @@
+{% set name = "xpermutations" %}
+{% set version = "1.0.1" %}
+{% set hash_type = "sha256" %}
+{% set hash_val = "2af69729f6c3ce4673ab08f7feb1207419ed0cd13a76e44a874da5fb1ad4a8bb" %}
+
+package:
+  name: {{ name }}
+  version: {{ version }}
+
+source:
+  fn: {{ name }}-{{ version }}.tar.gz
+  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+  {{ hash_type }}: {{ hash_val }}
+
+build:
+  number: 0
+  string: py27_0
+  script: python setup.py install --single-version-externally-managed --record record.txt
+
+requirements:
+  build:
+    - python
+    - phyles
+    - configobj
+    - setuptools
+
+  run:
+    - python
+    - phyles
+
+test:
+  imports:
+    - xpermutations
+
+about:
+  home: http://pypi.python.org/pypi/xpermutations/
+  license: BSD 3-clause
+  license_family: BSD
+  summary: 'Makes permuations; Based on ActiveState recipe 190465'
+  author: James C. Stroud
+
+extra:
+  recipe-maintainers:
+    - brittainhard

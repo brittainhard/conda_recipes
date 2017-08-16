@@ -1,0 +1,48 @@
+{% set name = "phyles" %}
+{% set version = "0.2.16" %}
+{% set hash_type = "sha256" %}
+{% set hash_val = "af6b9beaf8581e19f0154ac8370cbd69445fb795aeea5125b5249259fb0ccf18" %}
+
+package:
+  name: {{ name }}
+  version: {{ version }}
+
+source:
+  fn: {{ name }}-{{ version }}.tar.gz
+  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+  {{ hash_type }}: {{ hash_val }}
+
+build:
+  number: 0
+  string: py27_0
+  script: python setup.py install --single-version-externally-managed --record record.txt
+
+requirements:
+  build:
+    - python
+    - configobj
+    - setuptools
+    - pyyaml
+    - distribute
+    - ordereddict
+
+  run:
+    - python
+    - pyyaml
+    - distribute
+    - ordereddict
+
+test:
+  imports:
+    - phyles
+
+about:
+  home: http://phyles.bravais.net
+  license: BSD 3-clause
+  license_family: BSD
+  summary: 'Makes permuations; Based on ActiveState recipe 190465'
+  author: James C. Stroud
+
+extra:
+  recipe-maintainers:
+    - brittainhard
