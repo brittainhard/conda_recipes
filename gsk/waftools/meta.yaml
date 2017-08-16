@@ -14,9 +14,9 @@ source:
 
 build:
   number: 0
+  script: python setup.py install --single-version-externally-managed --record record.txt
   entry_points:
     - wafinstall=waftools.wafinstall:main
-  script: wafinstall
 
 requirements:
   build:
@@ -35,6 +35,8 @@ requirements:
 test:
   imports:
     - waftools
+  commands:
+    - wafinstall -h
 
 about:
   home: https://bitbucket.org/Moo7/waftools
