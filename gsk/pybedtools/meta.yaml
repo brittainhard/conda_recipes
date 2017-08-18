@@ -1,0 +1,62 @@
+{% set name = "pybedtools" %}
+{% set version = "0.7.10" %}
+{% set hash_type = "sha256" %}
+{% set hash_value = "518a2311bd33f29cf2ee8fc1a028dda8c8e380c9fc83fcb0fbaa206933174b50" %}
+
+package:
+  version: '{{ version }}'
+  name: '{{ name|lower }}'
+
+source:
+  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+  '{{ hash_type }}': '{{ hash_value }}'
+  fn: '{{ name }}-{{ version }}.tar.gz'
+
+build:
+  number: 0
+  script: python setup.py install  --single-version-externally-managed --record=record.txt
+
+requirements:
+  run:
+    - python
+    - six
+    - pysam
+  build:
+    - python
+    - setuptools
+    - six
+    - pysam
+
+test:
+  imports:
+    - pybedtools
+    - pybedtools.contrib
+    - pybedtools.scripts
+    - pybedtools.test
+    - pybedtools.test.data
+
+about:
+  dev_url: ''
+  description: "Overview\n--------\n\n.. image:: https://travis-ci.org/daler/pybedtools.png?branch=master\n    :target: https://travis-ci.org/daler/pybedtools\n\n.. image:: https://badge.fury.io/py/pybedtools.svg?style=flat\n\
+    \    :target: http://badge.fury.io/py/pybedtools\n\n.. image:: https://img.shields.io/badge/install%20with-bioconda-brightgreen.svg\n    :target: http://bioconda.github.io\n\nThe `BEDTools suite of\
+    \ programs <http://bedtools.readthedocs.org/>`_ is widely\nused for genomic interval manipulation or \"genome algebra\".  `pybedtools` wraps\nand extends BEDTools and offers feature-level manipulations\
+    \ from within\nPython.\n\nSee full online documentation, including installation instructions, at\nhttp://daler.github.io/pybedtools/.\n\nWhy `pybedtools`?\n-----------------\n\nHere is an example to\
+    \ get the names of genes that are <5 kb away from\nintergenic SNPs:\n\n.. code-block:: python\n\n    from pybedtools import BedTool\n\n    snps = BedTool('snps.bed.gz')  # [1]\n    genes = BedTool('hg19.gff')\
+    \    # [1]\n\n    intergenic_snps = snps.subtract(genes)                       # [2]\n    nearby = genes.closest(intergenic_snps, d=True, stream=True) # [2, 3]\n\n    for gene in nearby:           \
+    \  # [4]\n        if int(gene[-1]) < 5000:    # [4]\n            print gene.name         # [4]\n\nUseful features shown here include:\n\n* `[1]` support for all BEDTools-supported formats (here gzipped\
+    \ BED and GFF)\n* `[2]` wrapping of all BEDTools programs and arguments (here, `subtract` and `closest` and passing\n  the `-d` flag to `closest`);\n* `[3]` streaming results (like Unix pipes, here\
+    \ specified by `stream=True`)\n* `[4]` iterating over results while accessing feature data by index or by attribute\n  access (here `[-1]` and `.name`).\n\nIn contrast, here is the same analysis using\
+    \ shell scripting.  Note that this\nrequires knowledge in Perl, bash, and awk.  The run time is identical to the\n`pybedtools` version above:\n\n.. code-block:: bash\n\n    snps=snps.bed.gz\n    genes=hg19.gff\n\
+    \    intergenic_snps=/tmp/intergenic_snps\n\n    snp_fields=`zcat $snps | awk '(NR == 2){print NF; exit;}'`\n    gene_fields=9\n    distance_field=$(($gene_fields + $snp_fields + 1))\n\n    intersectBed\
+    \ -a $snps -b $genes -v > $intergenic_snps\n\n    closestBed -a $genes -b $intergenic_snps -d \\\n    | awk '($'$distance_field' < 5000){print $9;}' \\\n    | perl -ne 'm/[ID|Name|gene_id]=(.*?);/;\
+    \ print \"$1\\n\"'\n\n    rm $intergenic_snps\n\nSee the `Shell script comparison <http://daler.github.io/pybedtools/sh-comparison.html>`_ in the docs\nfor more details on this comparison, or keep reading\
+    \ the full documentation at\nhttp://daler.github.io/pybedtools."
+  license: GNU General Public License (GPL)
+  license_family: LGPL
+  summary: Wrapper around BEDTools for bioinformatics work
+  home: https://github.com/daler/pybedtools
+  license_file: ''
+  doc_url: ''
+
+extra:
+  recipe-maintainers: ''

@@ -1,0 +1,54 @@
+{% set name = "inheritance" %}
+{% set version = "0.1.3" %}
+{% set hash_type = "sha256" %}
+{% set hash_value = "5c682f39ff14354f40cb79981cbf41d3d3ca8576c062419f568a4bd0605c42b5" %}
+
+package:
+  version: '{{ version }}'
+  name: '{{ name|lower }}'
+
+source:
+  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+  '{{ hash_type }}': '{{ hash_value }}'
+  fn: '{{ name }}-{{ version }}.tar.gz'
+
+build:
+  number: 0
+  script: python setup.py install  --single-version-externally-managed --record=record.txt
+
+requirements:
+  run:
+    - python
+  build:
+    - python
+    - setuptools
+
+test:
+  imports:
+    - inheritance
+    - inheritance.tests
+  requires:
+    - nose
+
+about:
+  dev_url: ''
+  description: "inheritance models for mendelian diseases\n-----------------------------------------\n\n[![Build Status](https://travis-ci.org/brentp/inheritance.svg?branch=master)](https://travis-ci.org/brentp/inheritance)\n\
+    \nThis module is a general-purpose framework for evaluating if a family exihibits, for example, and autosomal dominant pattern.\nThe logic for this was tuned in [gemini](https://github.com/arq5x/gemini)\
+    \ but we make it available here as a more general purpose library to encourage:\n1. community driven improvements\n2. use outside of gemini\n3. more comprehensive testing\n\nFinding variants that match\
+    \ autosomal dominance in a trio, for example is very simple to find,\nhowever, after considering multiple generations, arbitrary family sizes, depth cutoffs, and unknown\ngenotypes and phenotypes to\
+    \ support to real-world datasets it becomes tedious and error-prone.\n\nSupported inheritance tests\n===========================\n\n+ autosomal dominant\n+ autosomal recessive\n+ de novo\n+ X-linked\
+    \ dominant, recessive, and de novo\n+ compound heterozygote\n+ mendelian violation\n\nUsage\n=====\n\nFor now, the use is via api only. Users can look at the tests to see how to use. Most functions\
+    \ have a signature like:\n\n```Python\n auto_dom(self, min_depth=0, gt_ll=False, strict=True, only_affected=True)\n```\n\nwhere the arguments enforce a minimum depth, a maximum genotype likelihood,\
+    \ strictness (mostly related to parent-offspring requirements)\nand wether to allow unaffecteds to have the variant (or be homozygous alt).\n\nToDo\n====\n1. add support for X-linked soon.\n2. add a\
+    \ simple example of running on a VCF+PED\n3. code coverage\n4. code documentation\n\nTesting\n=======\n\nTests can be run as:\n\n```\nnosetests --with-coverage -x --with-doctest --cover-package inheritance\n\
+    ```\n\nOverview\n========\n\nthe generic code is in `inheritance/inheritance.py` and a specific implementation that we use in gemini is in `inheritance/pyeval.py`.\nTo make this available for a new\
+    \ resource, for example to `bcftools` we would look at the implementation of Filter in `inheritance/pyval.py`\nand make the generated strings match those expected by `bcftools`."
+  license: MIT License
+  license_family: MIT
+  summary: inheritance models for mendelian genetics
+  home: The package home page
+  license_file: ''
+  doc_url: ''
+
+extra:
+  recipe-maintainers: ''

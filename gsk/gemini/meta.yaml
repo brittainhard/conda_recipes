@@ -1,75 +1,88 @@
+{% set name = "gemini" %}
+{% set version = "0.18.3" %}
+{% set hash_type = "sha256" %}
+{% set hash_value = "8ce6fc37cf3a26afacdf6aa446ac607eff156dee010ff70cf567149f5e902a7b" %}
+
 package:
-  name: gemini
-  version: "0.18.3"
-build:
-  number: 1
-  skip: True # [not py27]
+  version: '{{ version }}'
+  name: '{{ name|lower }}'
+
 source:
-  # patch config generation issue in 0.18.1
-  url: https://pypi.python.org/packages/source/g/gemini/gemini-0.18.3.tar.gz
-  fn: gemini-0.18.3.tar.gz
-  md5: d728aed92257135324fd2674cf77f54e
-  #fn: gemini-0.18.1.tar.gz
-  #url: https://pypi.python.org/packages/source/g/gemini/gemini-0.18.1.tar.gz
-  #md5: eae6081847392e7a4535c2c909900a59
+  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+  '{{ hash_type }}': '{{ hash_value }}'
+  fn: '{{ name }}-{{ version }}.tar.gz'
+
+build:
+  number: 0
+  script: python setup.py install  --single-version-externally-managed --record=record.txt
 
 requirements:
+  run:
+    - python
+    - numpy >=1.7.1
+    - inheritance >=0.0.5
+    - geneimpacts >=0.1.1
+    - pyparsing >=1.5.6,<=1.5.7
+    - cython >=0.22.1
+    - pysam >=0.6
+    - cyvcf2 >=0.2.3
+    - pyyaml >=3.10
+    - pybedtools >=0.6.2
+    - jinja2 >=2.7.1
+    - networkx >=1.10
+    - bottle >=0.11.6
+    - ipyparallel >=4.0
+    - ipython-cluster-helper >=0.5.1
+    - bx-python >=0.7.1
+    - pandas >=0.11.0
+    - openpyxl >=1.6.1,<2.0.0
+    - scipy >=0.12.0
+    - unidecode >=0.04.14
+    - cyordereddict ==0.2.2
+    - bcolz >=0.11.3
+    - numexpr >=2.4.3
   build:
     - python
     - setuptools
-    - bcolz
-    - bottle
-    - bx-python
-    - cyordereddict
-    - cython
-    - cyvcf2
-    - geneimpacts
-    - inheritance
-    - ipyparallel
-    - ipython-cluster-helper
-    - jinja2
-    - networkx
-    - numexpr
-    - numpy
-    - openpyxl
-    - pandas
-    - pybedtools
-    - pysam
-    - pyyaml
-    - scipy
-    - unidecode
-  run:
-    - python
-    - bcolz
-    - bottle
-    - bx-python
-    - cyordereddict
-    - cython
-    - cyvcf2
-    - geneimpacts
-    - inheritance
-    - ipyparallel
-    - ipython-cluster-helper
-    - jinja2
-    - networkx
-    - numexpr
-    - numpy
-    - openpyxl
-    - pandas
-    - pybedtools
-    - pysam
-    - pyyaml
-    - scipy
-    - unidecode
-    - grabix
+    - numpy >=1.7.1
+    - inheritance >=0.0.5
+    - geneimpacts >=0.1.1
+    - pyparsing >=1.5.6,<=1.5.7
+    - cython >=0.22.1
+    - pysam >=0.6
+    - cyvcf2 >=0.2.3
+    - pyyaml >=3.10
+    - pybedtools >=0.6.2
+    - jinja2 >=2.7.1
+    - networkx >=1.10
+    - bottle >=0.11.6
+    - ipyparallel >=4.0
+    - ipython-cluster-helper >=0.5.1
+    - bx-python >=0.7.1
+    - pandas >=0.11.0
+    - openpyxl >=1.6.1,<2.0.0
+    - scipy >=0.12.0
+    - unidecode >=0.04.14
+    - cyordereddict ==0.2.2
+    - bcolz >=0.11.3
+    - numexpr >=2.4.3
 
 test:
-  commands:
-    - gemini -h
   imports:
     - gemini
+    - gemini.data
+    - gemini.scripts
+    - gemini.tests
 
 about:
-  home: https://github.com/arq5x/gemini
-  license: MIT License
-  summary: a lightweight db framework for disease and population genetics.
+  dev_url: ''
+  description: '``gemini`` is a database framework for exploring genetic variation'''
+  license: GNU General Public License (GPL)
+  license_family: LGPL
+  summary: A database framework for exploring genetic variation
+  home: http://gemini.readthedocs.org
+  license_file: ''
+  doc_url: ''
+
+extra:
+  recipe-maintainers: ''

@@ -1,0 +1,67 @@
+{% set name = "ipython-cluster-helper" %}
+{% set version = "0.5.6" %}
+{% set hash_type = "sha256" %}
+{% set hash_value = "5b3129560916fa5330d13a6e780525096ba4c7d9ead48e2cfdbc7152d41a0bc8" %}
+
+package:
+  version: '{{ version }}'
+  name: '{{ name|lower }}'
+
+source:
+  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+  '{{ hash_type }}': '{{ hash_value }}'
+  fn: '{{ name }}-{{ version }}.tar.gz'
+
+build:
+  number: 0
+  script: python setup.py install  --single-version-externally-managed --record=record.txt
+
+requirements:
+  run:
+    - python
+    - setuptools >=18.5
+    - pyzmq >=2.1.11
+    - ipython <5.0.0,>=4.0.0
+    - ipyparallel >=4.0.0
+    - netifaces >=0.10.3
+    - six >=1.10.0
+  build:
+    - python
+    - pip
+    - setuptools
+    - setuptools >=18.5
+    - pyzmq >=2.1.11
+    - ipython <5.0.0,>=4.0.0
+    - ipyparallel >=4.0.0
+    - netifaces >=0.10.3
+    - six >=1.10.0
+
+test:
+  imports:
+    - cluster_helper
+    - cluster_helper.log
+
+about:
+  dev_url: ''
+  description: "ipython-cluster-helper\n======================\n.. image:: https://travis-ci.org/roryk/ipython-cluster-helper.svg\n    :target: https://travis-ci.org/roryk/ipython-cluster-helper\n.. image::\
+    \ https://zenodo.org/badge/3658/roryk/ipython-cluster-helper.svg\n    :target: https://zenodo.org/record/17119#.VT7oWs5dqyM\n\nQuickly and easily parallelize Python functions using IPython on a\ncluster,\
+    \ supporting multiple schedulers. Optimizes IPython defaults to\nhandle larger clusters and simultaneous processes.\n\nExample\n-------\n\nLets say you wrote a program that takes several files in as\
+    \ arguments\nand performs some kind of long running computation on them. Your\noriginal implementation used a loop but it was way too slow\n\n.. code-block:: python\n\n    from yourmodule import long_running_function\n\
+    \    import sys\n\n    if __name__ == \"__main__\":\n        for f in sys.argv[1:]:\n            long_running_function(f)\n\nIf you have access to one of the supported schedulers you can easily\nparallelize\
+    \ your program across 5 nodes with ipython-cluster-helper\n\n.. code-block:: python\n\n    from cluster_helper.cluster import cluster_view\n    from yourmodule import long_running_function\n    import\
+    \ sys\n\n    if __name__ == \"__main__\":\n        with cluster_view(scheduler=\"lsf\", queue=\"hsph\", num_jobs=5) as view:\n            view.map(long_running_function, sys.argv[1:])\n\nThat's it!\
+    \ No setup required.\n\nTo run a local cluster for testing purposes pass `run_local` as an extra\nparameter to the cluster_view function\n\n.. code-block:: python\n\n    with cluster_view(scheduler=None,\
+    \ queue=None, num_jobs=5,\n                      extra_params={\"run_local\": True}) as view:\n        view.map(long_running_function, sys.argv[1:])\n\nHow it works\n------------\n\nipython-cluster-helper\
+    \ creates a throwaway parallel IPython profile,\nlaunches a cluster and returns a view. On program exit it shuts the\ncluster down and deletes the throwaway profile.\n\nSupported schedulers\n--------------------\n\
+    \nPlatform LSF (\"lsf\"), Sun Grid Engine (\"sge\"), Torque (\"torque\"), SLURM (\"slurm\").\n\nCredits\n-------\n\nThe cool parts of this were ripped from `bcbio-nextgen`_.\n\nContributors\n------------\n\
+    * Brad Chapman (@chapmanb)\n* Mario Giovacchini (@mariogiov)\n* Valentine Svensson (@vals)\n* Roman Valls (@brainstorm)\n* Rory Kirchner (@roryk)\n* Luca Beltrame (@lbeltrame)\n* James Porter (@porterjamesj)\n\
+    * Billy Ziege (@billyziege)\n* ink1 (@ink1)\n* @mjdellwo\n* @matthias-k\n* Andrew Oler (@oleraj)\n* Alain P\xE9teut (@peteut)\n* Matt De Both (@mdeboth)\n\n.. _bcbio-nextgen: https://github.com/chapmanb/bcbio-nextgen\n"
+  license: MIT
+  license_family: MIT
+  summary: Simplify IPython cluster start up and use for multiple schedulers.
+  home: https://github.com/roryk/ipython-cluster-helper
+  license_file: ''
+  doc_url: ''
+
+extra:
+  recipe-maintainers: ''

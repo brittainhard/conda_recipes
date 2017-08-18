@@ -1,0 +1,103 @@
+{% set name = "ipython-sql" %}
+{% set version = "0.3.8" %}
+{% set hash_type = "sha256" %}
+{% set hash_value = "62f3689f4e2b4071eb9fd743386f358bfca8f76c942d50abf306914580fc149d" %}
+
+package:
+  version: '{{ version }}'
+  name: '{{ name|lower }}'
+
+source:
+  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+  '{{ hash_type }}': '{{ hash_value }}'
+  fn: '{{ name }}-{{ version }}.tar.gz'
+
+build:
+  number: 0
+  script: python setup.py install  --single-version-externally-managed --record=record.txt
+
+requirements:
+  run:
+    - python
+    - prettytable
+    - ipython >=1.0
+    - sqlalchemy >=0.6.7
+    - sqlparse
+    - six
+    - ipython-genutils >=0.1.0
+  build:
+    - python
+    - setuptools
+    - prettytable
+    - ipython >=1.0
+    - sqlalchemy >=0.6.7
+    - sqlparse
+    - six
+    - ipython-genutils >=0.1.0
+
+test:
+  imports:
+    - sql
+
+about:
+  dev_url: ''
+  description: "===========\nipython-sql\n===========\n\n:Author: Catherine Devlin, http://catherinedevlin.blogspot.com\n\nIntroduces a %sql (or %%sql) magic.\n\nConnect to a database, using SQLAlchemy\
+    \ connect strings, then issue SQL\ncommands within IPython or IPython Notebook.\n\n.. image:: https://raw.github.com/catherinedevlin/ipython-sql/master/examples/writers.png\n   :width: 600px\n   :alt:\
+    \ screenshot of ipython-sql in the Notebook\n\nExamples\n--------\n\n.. code-block:: python\n\n    In [1]: %load_ext sql\n\n    In [2]: %%sql postgresql://will:longliveliz@localhost/shakes\n       ...:\
+    \ select * from character\n       ...: where abbrev = 'ALICE'\n       ...:\n    Out[2]: [(u'Alice', u'Alice', u'ALICE', u'a lady attending on Princess Katherine', 22)]\n\n    In [3]: result = _\n\n\
+    \    In [4]: print(result)\n    charid   charname   abbrev                description                 speechcount\n    =================================================================================\n\
+    \    Alice    Alice      ALICE    a lady attending on Princess Katherine   22\n\n    In [4]: result.keys\n    Out[5]: [u'charid', u'charname', u'abbrev', u'description', u'speechcount']\n\n    In [6]:\
+    \ result[0][0]\n    Out[6]: u'Alice'\n\n    In [7]: result[0].description\n    Out[7]: u'a lady attending on Princess Katherine'\n\nAfter the first connection, connect info can be omitted::\n\n    In\
+    \ [8]: %sql select count(*) from work\n    Out[8]: [(43L,)]\n\nConnections to multiple databases can be maintained.  You can refer to\nan existing connection by username@database\n\n.. code-block::\
+    \ python\n\n    In [9]: %%sql will@shakes\n       ...: select charname, speechcount from character\n       ...: where  speechcount = (select max(speechcount)\n       ...:                       from\
+    \ character);\n       ...:\n    Out[9]: [(u'Poet', 733)]\n\n    In [10]: print(_)\n    charname   speechcount\n    ======================\n    Poet       733\n\nFor secure access, you may dynamically\
+    \ access your credentials (e.g. from your system environment or `getpass.getpass`) to avoid storing your password in the notebook itself. Use the `$` before any variable to access it in your `%sql`\
+    \ command.\n\n.. code-block:: python\n\n    In [11]: user = os.getenv('SOME_USER')\n       ....: password = os.getenv('SOME_PASSWORD')\n       ....: connection_string = \"postgresql://{user}:{password}@localhost/some_database\"\
+    .format(user=user, password=password)\n       ....: %sql $connection_string\n    Out[11]: u'Connected: some_user@some_database'\n\nYou may use multiple SQL statements inside a single cell, but you will\n\
+    only see any query results from the last of them, so this really only\nmakes sense for statements with no output\n\n.. code-block:: python\n\n    In [11]: %%sql sqlite://\n       ....: CREATE TABLE\
+    \ writer (first_name, last_name, year_of_death);\n       ....: INSERT INTO writer VALUES ('William', 'Shakespeare', 1616);\n       ....: INSERT INTO writer VALUES ('Bertold', 'Brecht', 1956);\n    \
+    \   ....:\n    Out[11]: []\n\n\nBind variables (bind parameters) can be used in the \"named\" (:x) style.\nThe variable names used should be defined in the local namespace\n\n.. code-block:: python\n\
+    \n    In [12]: name = 'Countess'\n\n    In [13]: %sql select description from character where charname = :name\n    Out[13]: [(u'mother to Bertram',)]\n\nAs a convenience, dict-style access for result\
+    \ sets is supported, with the\nleftmost column serving as key, for unique values.\n\n.. code-block:: python\n\n    In [14]: result = %sql select * from work\n    43 rows affected.\n\n    In [15]: result['richard2']\n\
+    \    Out[15]: (u'richard2', u'Richard II', u'History of Richard II', 1595, u'h', None, u'Moby', 22411, 628)\n\nConnecting\n----------\n\nConnection strings are `SQLAlchemy`_ standard.\n\nSome example\
+    \ connection strings::\n\n    mysql+pymysql://scott:tiger@localhost/foo\n    oracle://scott:tiger@127.0.0.1:1521/sidname\n    sqlite://\n    sqlite:///foo.db\n\n.. _SQLAlchemy: http://docs.sqlalchemy.org/en/latest/core/engines.html#database-urls\n\
+    \nNote that ``mysql`` and ``mysql+pymysql`` connections (and perhaps others)\ndon't read your client character set information from .my.cnf.  You need\nto specify it in the connection string::\n\n \
+    \   mysql+pymysql://scott:tiger@localhost/foo?charset=utf8\n\nConfiguration\n-------------\n\nQuery results are loaded as lists, so very large result sets may use up\nyour system's memory and/or hang\
+    \ your browser.  There is no autolimit\nby default.  However, `autolimit` (if set) limits the size of the result\nset (usually with a `LIMIT` clause in the SQL).  `displaylimit` is similar,\nbut the\
+    \ entire result set is still pulled into memory (for later analysis);\nonly the screen display is truncated.\n\n.. code-block:: python\n\n    In [2]: %config SqlMagic\n    SqlMagic options\n    --------------\n\
+    \    SqlMagic.autolimit=<Int>\n        Current: 0\n        Automatically limit the size of the returned result sets\n    SqlMagic.autopandas=<Bool>\n        Current: False\n        Return Pandas DataFrames\
+    \ instead of regular result sets\n    SqlMagic.displaylimit=<Int>\n        Current: 0\n        Automatically limit the number of rows displayed (full result set is still\n        stored)\n    SqlMagic.feedback=<Bool>\n\
+    \        Current: True\n        Print number of rows affected by DML\n    SqlMagic.short_errors=<Bool>\n        Current: True\n        Don't display the full traceback on SQL Programming Error\n   \
+    \ SqlMagic.style=<Unicode>\n        Current: 'DEFAULT'\n        Set the table printing style to any of prettytable's defined styles\n        (currently DEFAULT, MSWORD_FRIENDLY, PLAIN_COLUMNS, RANDOM)\n\
+    \n    In[3]: %config SqlMagic.feedback = False\n\nPandas\n------\n\nIf you have installed ``pandas``, you can use a result set's\n``.DataFrame()`` method\n\n.. code-block:: python\n\n    In [3]: result\
+    \ = %sql SELECT * FROM character WHERE speechcount > 25\n\n    In [4]: dataframe = result.DataFrame()\n\nThe bogus non-standard pseudo-SQL command ``PERSIST`` will create a table name\nin the database\
+    \ from the named DataFrame.\n\n.. code-block:: python\n\n    In [5]: %sql PERSIST dataframe\n\n    In [6]: %sql SELECT * FROM dataframe;\n\n.. _Pandas: http://pandas.pydata.org/\n\nGraphing\n--------\n\
+    \nIf you have installed ``matplotlib``, you can use a result set's\n``.plot()``, ``.pie()``, and ``.bar()`` methods for quick plotting\n\n.. code-block:: python\n\n    In[5]: result = %sql SELECT title,\
+    \ totalwords FROM work WHERE genretype = 'c'\n\n    In[6]: %matplotlib inline\n\n    In[7]: result.pie()\n\n.. image:: https://raw.github.com/catherinedevlin/ipython-sql/master/examples/wordcount.png\n\
+    \   :alt: pie chart of word count of Shakespeare's comedies\n\n\nInstalling\n----------\n\nInstall the lastest release with::\n\n    pip install ipython-sql\n\nor download from https://github.com/catherinedevlin/ipython-sql\
+    \ and::\n\n    cd ipython-sql\n    sudo python setup.py install\n\nDumping\n-------\n\nResult sets come with a ``.csv(filename=None)`` method.  This generates\ncomma-separated text either as a return\
+    \ value (if ``filename`` is not\nspecified) or in a file of the given name.\n\nDevelopment\n-----------\n\nhttps://github.com/catherinedevlin/ipython-sql\n\nCredits\n-------\n\n- Matthias Bussonnier\
+    \ for help with configuration\n- Olivier Le Thanh Duong for ``%config`` fixes and improvements\n- Distribute_\n- Buildout_\n- modern-package-template_\n- Mike Wilson for bind variable code\n- Thomas\
+    \ Kluyver and Steve Holden for debugging help\n- Berton Earnshaw for DSN connection syntax\n- Andr\xE9s Celis for SQL Server bugfix\n\n.. _Distribute: http://pypi.python.org/pypi/distribute\n.. _Buildout:\
+    \ http://www.buildout.org/\n.. _modern-package-template: http://pypi.python.org/pypi/modern-package-template\n\n\nNews\n====\n\n0.1\n---\n\n*Release date: 21-Mar-2013*\n\n* Initial release\n\n0.1.1\n\
+    -----\n\n*Release date: 29-Mar-2013*\n\n* Release to PyPI\n\n* Results returned as lists\n\n* print(_) to get table form in text console\n\n* set autolimit and text wrap in configuration\n\n\n0.1.2\n\
+    -----\n\n*Release date: 29-Mar-2013*\n\n* Python 3 compatibility\n\n* use prettyprint package\n\n* allow multiple SQL per cell\n\n0.2.0\n-----\n\n*Release date: 30-May-2013*\n\n* Accept bind variables\
+    \ (Thanks Mike Wilson!)\n\n0.2.1\n-----\n\n*Release date: 15-June-2013*\n\n* Recognize socket connection strings\n\n* Bugfix - issue 4 (remember existing connections by case)\n\n0.2.2\n-----\n\n*Release\
+    \ date: 30-July-2013*\n\nConverted from an IPython Plugin to an Extension for 1.0 compatibility\n\n0.2.2.1\n-------\n\n*Release date: 01-Aug-2013*\n\nDeleted Plugin import left behind in 0.2.2\n\n0.2.3\n\
+    -----\n\n*Release date: 20-Sep-2013*\n\n* Contributions from Olivier Le Thanh Duong:\n\n  - SQL errors reported without internal IPython error stack\n\n  - Proper handling of configuration\n\n* Added\
+    \ .DataFrame(), .pie(), .plot(), and .bar() methods to\nresult sets\n\n0.3.0\n-----\n\n*Release date: 13-Oct-2013*\n\n* displaylimit config parameter\n\n* reports number of rows affected by each query\n\
+    \n* test suite working again\n\n* dict-style access for result sets by primary key\n\n0.3.1\n-----\n\n* Reporting of number of rows affected configurable with ``feedback``\n\n* Local variables usable\
+    \ as SQL bind variables\n\n0.3.2\n-----\n\n* ``.csv(filename=None)`` method added to result sets\n\n0.3.3\n-----\n\n* Python 3 compatibility restored\n* DSN access supported (thanks Berton Earnshaw)\n\
+    \n0.3.4\n-----\n\n* PERSIST pseudo-SQL command added\n\n0.3.5\n-----\n\n* Indentations visible in HTML cells\n* COMMIT each SQL statement immediately - prevent locks\n\n0.3.6\n-----\n\n* Fixed issue\
+    \ #30, commit failures for sqlite (thanks stonebig, jandot)\n\n0.3.7\n-----\n\n* New `column_local_vars` config option submitted by darikg\n* Avoid contaminating user namespace from locals (thanks alope107)\n\
+    \n0.3.7.1\n-------\n\n* Avoid \"connection busy\" error for SQL Server (thanks Andr\xE9s Celis)\n\n0.3.8\n-----\n\n* Stop warnings for deprecated use of IPython 3 traitlets in IPython 4 (thanks graphaelli;\
+    \ also stonebig, aebrahim, mccahill) \n* README update for keeping connection info private, from eshilts"
+  license: MIT License
+  license_family: MIT
+  summary: RDBMS access via IPython
+  home: https://pypi.python.org/pypi/ipython-sql
+  license_file: ''
+  doc_url: ''
+
+extra:
+  recipe-maintainers: ''

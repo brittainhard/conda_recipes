@@ -1,0 +1,39 @@
+# This file created by conda-build 2.0.7
+# meta.yaml template originally from:
+# /opt/recipe, last modified Thu May  4 16:03:05 2017
+# ------------------------------------------------
+
+package:
+    name: cyvcf2
+    version: 0.7.2
+source:
+    git_rev: v0.7.2
+    md5: bd42bb44534db93b52ee2e97836abb6c
+    url: https://github.com/brentp/cyvcf2/archive/v0.7.2.tar.gz
+build:
+    number: '0'
+requirements:
+    build:
+        - python
+        - setuptools
+        - cython
+        - numpy
+        - gcc
+        - zlib
+        - cython
+    run:
+        - python
+        - numpy
+        - matplotlib
+        - seaborn
+        - pandas
+        - libgcc
+        - zlib
+test:
+    imports:
+        - cyvcf2
+about:
+    home: https://github.com/brentp/cyvcf2
+    license: MIT
+    summary: A cython wrapper around htslib built for fast parsing of Variant Call
+        Format (VCF) files
