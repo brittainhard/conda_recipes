@@ -7,11 +7,11 @@ source:
     url: https://pypi.io/packages/source/j/jupyterhub/jupyterhub-0.7.2.tar.gz
 build:
     number: 0
-    script: pip install --no-deps .
+    script: python setup.py install
 requirements:
     build:
         - configurable-http-proxy
-        - python
+        - python >=3.3
         - traitlets >=4.1
         - tornado >=4.1
         - jinja2
@@ -20,7 +20,7 @@ requirements:
         - requests
     run:
         - configurable-http-proxy
-        - python
+        - python >=3.3
         - traitlets >=4.1
         - tornado >=4.1
         - jinja2
