@@ -17,13 +17,13 @@ build:
   script: python setup.py install  --single-version-externally-managed --record=record.txt
 
 requirements:
-  run:
-    - python
-    - theano
-    - click
   build:
     - python
     - setuptools
+    - theano
+    - click
+  run:
+    - python
     - theano
     - click
 
@@ -64,4 +64,5 @@ about:
   doc_url: ''
 
 extra:
-  recipe-maintainers: ''
+  recipe-maintainers:
+      - brittainhard

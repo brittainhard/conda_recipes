@@ -16,10 +16,10 @@ requirements:
     - python
     - setuptools
     - cython
-    - numpy x.x
+    - numpy
   run:
     - python
-    - numpy x.x
+    - numpy
     - scipy
     - scikit-learn
     - numexpr
