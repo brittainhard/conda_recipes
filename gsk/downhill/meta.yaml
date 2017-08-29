@@ -23,6 +23,7 @@ requirements:
     - theano
     - click
   run:
+    - setuptools
     - python
     - theano
     - click

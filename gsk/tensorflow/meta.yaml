@@ -1,0 +1,59 @@
+package:
+  name: tensorflow
+  version: "0.12.0"
+
+source:
+  fn: tensorflow-0.12.0.tar.gz
+  url: https://github.com/tensorflow/tensorflow/archive/v0.12.0.tar.gz
+  sha256: 13a1d4e98c82eae7e26fe75384de1517d6126f63ba5d302392ec02ac3ae4b1b9
+  patches:
+    # Add -lrt to the link options list
+    # https://github.com/tensorflow/tensorflow/issues/121
+    - rt_link_arg.patch
+    # zlib download location has changed since the release
+    - change-zlib-download-location.patch
+    - 6225.patch
+
+build:
+  number: 0
+  entry_points:
+    - tensorboard = tensorflow.tensorboard.tensorboard:main
+
+requirements:
+  build:
+    # conda build requirements
+    - bazel >=0.4.5
+    - pip
+    - python
+    - swig
+    - zlib
+    # requirements specified by the package itself
+    - wheel
+    - six >=1.10.0
+    - protobuf ==3.1.0
+    - numpy 1.11*
+    - mock >=2.0.0       [py2k]
+  run:
+    - python
+    - six >=1.10.0
+    - protobuf ==3.1.0
+    - numpy >=1.11
+    - mock >=2.0.0       [py2k]
+
+test:
+  imports:
+    - tensorflow
+  commands:
+    - conda inspect linkages -p $PREFIX tensorflow
+
+about:
+  home: http://tensorflow.org/
+  license: Apache 2.0
+  license_family: Apache
+  summary: TensorFlow is a machine learning library
+  description: |
+    TensorFlow provides multiple APIs.The lowest level API, TensorFlow Core
+    provides you with complete programming control.
+  dev_url: https://github.com/tensorflow/tensorflow
+  doc_url: https://www.tensorflow.org/get_started/get_started
+  doc_source_url: https://github.com/tensorflow/tensorflow/tree/master/tensorflow/docs_src

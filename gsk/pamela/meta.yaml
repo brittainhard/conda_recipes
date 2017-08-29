@@ -1,44 +1,36 @@
-{% set name = "pamela" %}
 {% set version = "0.3.0" %}
-{% set hash_type = "sha256" %}
-{% set hash_value = "1e198446a6cdd87704aa0def7621d62e7c20b0e6068e2788b9a866a8355e5d6b" %}
 
 package:
-  version: '{{ version }}'
-  name: '{{ name|lower }}'
+  name: pamela
+  version: {{ version }}
 
 source:
-  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  '{{ hash_type }}': '{{ hash_value }}'
-  fn: '{{ name }}-{{ version }}.tar.gz'
+  fn: pamela-{{ version }}.tar.gz
+  url: https://pypi.io/packages/source/p/pamela/pamela-{{ version }}.tar.gz
+  md5: de6516118d51eb5fc97017f3b6d5c68b
 
 build:
   number: 0
-  script: 'python setup.py install '
+  skip: true  # [win]
+  script: pip install --no-deps .
 
 requirements:
-  run:
-    - python
   build:
     - python
+    - pip
+
+  run:
+    - python
+
+test:
+  imports:
+    - pamela
 
 about:
-  dev_url: ''
-  description: '
-
-    An interface to the Pluggable Authentication Modules (PAM) library,
-
-    written in pure Python (using ctypes).
-
-
-
-    '
-  license: MIT License
-  license_family: MIT
+  home: https://github.com/minrk/pamela
+  license: MIT
   summary: PAM interface using ctypes
-  home: http://github.com/minrk/pamela
-  license_file: ''
-  doc_url: ''
 
 extra:
-  recipe-maintainers: ''
+  recipe-maintainers:
+    - minrk

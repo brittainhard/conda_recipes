@@ -5,3 +5,6 @@ The command to get into a docker container:
 `sudo docker run --rm -it package_builder /bin/bash`
 
  ['rdflib', 'ruamel.yaml', 'schema-salad', 'shellescape']
+
+
+from theano.sandbox.rng_mrg import MRG_RandomStreams as RandomStreams

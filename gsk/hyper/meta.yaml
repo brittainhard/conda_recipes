@@ -23,11 +23,13 @@ requirements:
     - python
     - h2 >=2.4,<3.0
     - hyperframe >=3.2,<4.0
+    - enum34 #[py27]
   build:
     - python
     - setuptools
     - h2 >=2.4,<3.0
     - hyperframe >=3.2,<4.0
+    - enum34 #[py27]
 
 test:
   imports:

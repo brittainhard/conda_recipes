@@ -1,0 +1,31 @@
+From db3ac4b49183dc156e6d85ed399db014abc1e72c Mon Sep 17 00:00:00 2001
+From: Adam Michael <ajmichael@google.com>
+Date: Fri, 9 Dec 2016 16:16:32 -0500
+Subject: [PATCH] Don't fetch sample Android app deps in configure.
+
+`bazel fetch` runs the Bazel loading phase on the given targets. At the
+moment, the loading phase of an android_binary succeeds even if an
+android_sdk_repository is not set up in the WORKSPACE. However, this is
+deceptive as the purpose of the loading phase is to ensure that all
+files needed for the build are present. Without anandroid_sdk_repository
+set up, this is not the case. In the future, Bazel will likely not allow
+the loading phase to succeed for android_binary without an
+android_sdk_repository.
+---
+ configure | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/configure b/configure
+index 156c25fdd20..0c033d76fe4 100755
+--- a/configure
++++ b/configure
+@@ -24,7 +24,8 @@ function bazel_clean_and_fetch() {
+   if ! is_windows; then
+     bazel clean --expunge
+   fi
+-  bazel fetch //tensorflow/...
++  # TODO(https://github.com/bazelbuild/bazel/issues/2220) Remove the nested `bazel query`.
++  bazel fetch $(bazel query "//tensorflow/... -//tensorflow/examples/android/...")
+ }
+ 
+ ## Set up python-related environment settings

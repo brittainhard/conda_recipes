@@ -1,45 +1,48 @@
+{% set version = "0.7.2" %}
+
 package:
-    name: jupyterhub
-    version: 0.7.2
+  name: jupyterhub
+  version: {{ version }}
+
 source:
-    fn: jupyterhub-0.7.2.tar.gz
-    sha256: cbaaeb937a56ac4a1fef3d8b3a119fce77065d11a95db2006a64d9964ccdba5c
-    url: https://pypi.io/packages/source/j/jupyterhub/jupyterhub-0.7.2.tar.gz
+  fn: jupyterhub-{{ version }}.tar.gz
+  url: https://pypi.io/packages/source/j/jupyterhub/jupyterhub-{{ version }}.tar.gz
+  sha256: cbaaeb937a56ac4a1fef3d8b3a119fce77065d11a95db2006a64d9964ccdba5c
+
 build:
-    number: 0
-    script: python setup.py install
+  number: 0
+  skip: true  # [win or py2k]
+  script: pip install --no-deps .
+
 requirements:
-    build:
-        - configurable-http-proxy
-        - python >=3.3
-        - traitlets >=4.1
-        - tornado >=4.1
-        - jinja2
-        - pamela
-        - sqlalchemy
-        - requests
-    run:
-        - configurable-http-proxy
-        - python >=3.3
-        - traitlets >=4.1
-        - tornado >=4.1
-        - jinja2
-        - pamela
-        - sqlalchemy
-        - requests
+  build:
+    - python
+    - pip
+  run:
+    - configurable-http-proxy
+    - python
+    - traitlets >=4.1
+    - tornado >=4.1
+    - jinja2
+    - pamela
+    - sqlalchemy
+    - requests
+
 test:
-    commands:
-        - python -m jupyterhub --help-all
-    imports:
-        - jupyterhub
-        - jupyterhub.apihandlers
-        - jupyterhub.handlers
-        - jupyterhub.tests
-        - jupyterhub.app
+  imports:
+    - jupyterhub
+    - jupyterhub.apihandlers
+    - jupyterhub.handlers
+    - jupyterhub.tests
+    - jupyterhub.app
+  commands:
+    - python -m jupyterhub --help-all
+
 about:
-    home: https://github.com/jupyterhub/jupyterhub
-    license: BSD 3-Clause
-    summary: Multi-user server for Jupyter notebooks
+  home: https://github.com/jupyterhub/jupyterhub
+  license: BSD 3-Clause
+  summary: Multi-user server for Jupyter notebooks
+
 extra:
-    recipe-maintainers:
-        - brittainhard
+  recipe-maintainers:
+    - minrk
