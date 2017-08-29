@@ -26,6 +26,10 @@ requirements:
     - numpy
 
 test:
+  source_files:
+    - runtests.py
+  command:
+    - python runtests.py
   import:
     - skmonaco
 
