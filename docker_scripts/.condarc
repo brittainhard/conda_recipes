@@ -2,4 +2,4 @@ channels:
     - defaults
     - glaxosmithkline
 add_pip_as_python_dependency: False
-anaconda_upload: False
+anaconda_upload: True

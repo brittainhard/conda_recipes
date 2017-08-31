@@ -16,7 +16,7 @@ export TF_NEED_CUDA=0
 ./configure
 
 # build using bazel
-bazel ${BAZEL_OPTS} build --config=opt //tensorflow/tools/pip_package:build_pip_package
+bazel ${BAZEL_OPTS} build --jobs 2 --config=opt //tensorflow/tools/pip_package:build_pip_package
 
 # build a whl file
 mkdir -p $SRC_DIR/tensorflow_pkg
