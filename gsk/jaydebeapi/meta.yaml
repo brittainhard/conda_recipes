@@ -1,0 +1,81 @@
+{% set name = "JayDeBeApi" %}
+{% set version = "1.1.1" %}
+{% set hash_type = "sha256" %}
+{% set hash_value = "ba2dfa92c55e39476cea5a4b1a1750d94c8b3d166ed3c7f99601f19f744f2828" %}
+
+package:
+  name: '{{ name|lower }}'
+  version: '{{ version }}'
+
+source:
+  fn: '{{ name }}-{{ version }}.tar.gz'
+  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+  '{{ hash_type }}': '{{ hash_value }}'
+
+build:
+  number: 0
+  script: python setup.py install  --single-version-externally-managed --record=record.txt
+
+requirements:
+  build:
+    - python
+    - setuptools
+    - jpype1
+  run:
+    - python
+    - jpype1
+
+test:
+  imports:
+    - jaydebeapi
+
+about:
+  home: https://github.com/baztian/jaydebeapi
+  license: GNU Library or Lesser General Public License (LGPL)
+  license_family: LGPL
+  license_file: ''
+  summary: Use JDBC database drivers from Python 2/3 or Jython with a DB-API.
+  description: "=================================================================\n JayDeBeApi - bridge from JDBC database drivers to Python DB-API\n=================================================================\n\
+    \n.. image:: https://img.shields.io/travis/baztian/jaydebeapi/master.svg\n   :target: https://travis-ci.org/baztian/jaydebeapi\n\n.. image:: https://img.shields.io/coveralls/baztian/jaydebeapi/master.svg\n\
+    \    :target: https://coveralls.io/r/baztian/jaydebeapi\n\n.. image:: https://img.shields.io/badge/python-2.6,_2.7,_3.4-blue.svg\n    :target: https://pypi.python.org/pypi/JayDeBeApi/\n\n.. image::\
+    \ https://img.shields.io/badge/jython-2.7.0-blue.svg\n    :target: https://pypi.python.org/pypi/JayDeBeApi/\n\n.. image:: https://img.shields.io/github/tag/baztian/jaydebeapi.svg\n    :target: https://pypi.python.org/pypi/JayDeBeApi/\n\
+    \n.. image:: https://img.shields.io/pypi/dm/JayDeBeApi.svg\n    :target: https://pypi.python.org/pypi/JayDeBeApi/\n\nThe JayDeBeApi module allows you to connect from Python code to\ndatabases using\
+    \ Java `JDBC\n<http://java.sun.com/products/jdbc/overview.html>`_. It provides a\nPython DB-API_ v2.0 to that database.\n\nIt works on ordinary Python (cPython) using the JPype_ Java\nintegration or\
+    \ on `Jython <http://www.jython.org/>`_ to make use of\nthe Java JDBC driver.\n\nIn contrast to zxJDBC from the Jython project JayDeBeApi let's you\naccess a database with Jython AND Python with only\
+    \ minor code\nmodifications. JayDeBeApi's future goal is to provide a unique and\nfast interface to different types of JDBC-Drivers through a flexible\nplug-in mechanism.\n\n.. contents::\n\nInstall\n\
+    =======\n\nYou can get and install JayDeBeApi with `pip <http://pip.pypa.io/>`_\n::\n\n    $ pip install JayDeBeApi\n\nIf you want to install JayDeBeApi in Jython make sure to have pip or\nEasyInstall\
+    \ available for it.\n\nOr you can get a copy of the source by cloning from the `JayDeBeApi\ngithub project <https://github.com/baztian/jaydebeapi>`_ and install\nwith ::\n\n    $ python setup.py install\n\
+    \nor if you are using Jython use ::\n\n    $ jython setup.py install\n\nIt has been tested with Jython 2.7.0.\n\nIf you are using cPython ensure that you have installed JPype_\nproperly. It has been\
+    \ tested with JPype1 0.5.7. Older JPype\ninstallations may cause problems.\n\nUsage\n=====\n\nBasically you just import the ``jaydebeapi`` Python module and execute\nthe ``connect`` method. This gives\
+    \ you a DB-API_ conform connection to\nthe database.\n\nThe first argument to ``connect`` is the name of the Java driver\nclass. The second argument is a string with the JDBC connection\nURL. Third\
+    \ you can optionally supply a sequence consisting of user and\npassword or alternatively a dictionary containing arguments that are\ninternally passed as properties to the Java\n``DriverManager.getConnection``\
+    \ method. See the Javadoc of\n``DriverManager`` class for details.\n\nThe next parameter to ``connect`` is optional as well and specifies\nthe jar-Files of the driver if your classpath isn't set up\n\
+    sufficiently yet. The classpath set in ``CLASSPATH`` environment\nvariable will be honored. See the documentation of your Java runtime\nenvironment.\n\nHere is an example:\n\n>>> import jaydebeapi\n\
+    >>> conn = jaydebeapi.connect(\"org.hsqldb.jdbcDriver\",\n...                           \"jdbc:hsqldb:mem:.\",\n...                           [\"SA\", \"\"],\n...                           \"/path/to/hsqldb.jar\"\
+    ,)\n>>> curs = conn.cursor()\n>>> curs.execute('create table CUSTOMER'\n...                '(\"CUST_ID\" INTEGER not null,'\n...                ' \"NAME\" VARCHAR not null,'\n...                ' primary\
+    \ key (\"CUST_ID\"))'\n...             )\n>>> curs.execute(\"insert into CUSTOMER values (1, 'John')\")\n>>> curs.execute(\"select * from CUSTOMER\")\n>>> curs.fetchall()\n[(1, u'John')]\n>>> curs.close()\n\
+    >>> conn.close()\n\nAn alternative way to establish connection using connection\nproperties:\n\n>>> conn = jaydebeapi.connect(\"org.hsqldb.jdbcDriver\",\n...                           \"jdbc:hsqldb:mem:.\"\
+    ,\n...                           {'user': \"SA\", 'password': \"\",\n...                            'other_property': \"foobar\"},\n...                           \"/path/to/hsqldb.jar\",)\n\n\nIf you're\
+    \ having trouble getting this work check if your ``JAVA_HOME``\nenvironmentvariable is set correctly. For example I have to set it on\nmy Ubuntu machine like this ::\n\n    $ JAVA_HOME=/usr/lib/jvm/java-8-openjdk\
+    \ python\n\nSupported databases\n===================\n\nIn theory *every database with a suitable JDBC driver should work*. It\nis confirmed to work with the following databases:\n\n* SQLite\n* Hypersonic\
+    \ SQL (HSQLDB)\n* IBM DB2\n* IBM DB2 for mainframes\n* Oracle\n* Teradata DB\n* Netezza\n* Mimer DB\n* Microsoft SQL Server\n* MySQL\n* PostgreSQL\n* many more...\n\nContributing\n============\n\nPlease\
+    \ submit `bugs and patches\n<https://github.com/baztian/jaydebeapi/issues>`_. All contributors\nwill be acknowledged. Thanks!\n\nLicense\n=======\n\nJayDeBeApi is released under the GNU Lesser General\
+    \ Public license\n(LGPL). See the file ``COPYING`` and ``COPYING.LESSER`` in the\ndistribution for details.\n\n\nChangelog\n=========\n\n- Next version - unreleased\n- 1.1.1 - 2017-03-21\n\n  - Don't\
+    \ fail on dates before 1900 on Python < 3.\n\n- 1.1.0 - 2017-03-19\n\n  - Support BIT and TINYINT type mappings (thanks @Mokubyow for\n    reporting the issue).\n\n- 1.0.0 - 2017-01-10\n\n  - Allow\
+    \ for db properties to be passed to the connect\n    method. *Probably incompatible to code based on previous\n    versions.* See documentation of the connect method. (Thanks\n    @testlnord for you\
+    \ efforts and the patience.)\n\n  - New major version due to possible api incompatibility.\n\n- 0.2.0 - 2015-04-26\n\n  - Python 3 support (requires JPype1 >= 0.6.0).\n\n- 0.1.6 - 2015-04-10\n\n  -\
+    \ Fix Jython handling of Java exceptions that don't subclass python Exception\n\n  - Enrich exceptions with message from java SQLExceptions\n\n  - Be more specific about DB API exceptions: Distinguish\
+    \ DatabaseError and\n    InterfaceError.\n\n  - Fix typo LONGNARCHAR vs LONGVARCHAR (thanks @datdo for reporting #4)\n\n- 0.1.5 - 2015-03-02\n\n  - Add version number to module.\n\n  - Improve robustness\
+    \ of java to python type conversion.\n\n  - Support Time type.\n\n  - Add DB-API compliant exception handling.\n\n  - Minor documentation improvements.\n\n  - Some development related changes (Host\
+    \ project at github, use\n    Travis CI, use JPype1 for tests).\n\n- 0.1.4 - 2013-10-29\n\n  - More convenient way to setup Java classpath. *Important note*\n    check the changes to the ``connect``\
+    \ method and adapt your code.\n\n  - Honor ``CLASSPATH`` if used in JPype mode.\n\n  - Set ``.rowcount`` properly.\n\n  - Changed signature of ``.setoutputsize()`` to be DB-API compliant.\n\n- 0.1.3\
+    \ - 2011-01-27\n\n  - Fixed DB-API_ violation: Use ``curs.execute('foo ?', (bar, baz))``\n    instead of ``curs.execute('foo ?', bar, baz)``.\n\n  - Free resources after ``executemany`` call.\n\n  -\
+    \ Improved type handling. Initial support for BLOB columns.\n\n- 0.1.2 - 2011-01-25\n\n  - ``easy_install JayDeBeApi`` should really work.\n\n- 0.1.1 - 2010-12-12\n\n  - Fixed bug #688290 \"NULL values\
+    \ with converters error on fetch\".\n  - Fixed bug #684909 \"Selecting ROWIDs errors out on fetch\".\n\n- 0.1 - 2010-08-10\n\n  - Initial release.\n\nTo do\n=====\n\n- Extract Java calls to separate\
+    \ Java methods to increase performance.\n- Check if https://code.launchpad.net/dbapi-compliance can help making\n  JayDeBeApi more DB-API compliant.\n- Test it on different databases and provide a flexible\
+    \ db specific\n  pluign mechanism.\n- SQLAlchemy modules (separate project)\n\n.. _DB-API: http://www.python.org/dev/peps/pep-0249/\n.. _JPype: https://pypi.python.org/pypi/JPype1/"
+  doc_url: ''
+  dev_url: ''
+
+extra:
+  recipe-maintainers: ''
