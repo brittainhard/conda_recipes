@@ -1,0 +1,47 @@
+{% set name = "unittest2py3k" %}
+{% set version = "0.5.1" %}
+{% set hash_type = "sha256" %}
+{% set hash_value = "78249c5f1ac508a34d9d131d43a89d77bf154186f3ea5f7a6b993d3f3535d403" %}
+
+package:
+  name: '{{ name|lower }}'
+  version: '{{ version }}'
+
+source:
+  fn: '{{ name }}-{{ version }}.tar.gz'
+  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+  '{{ hash_type }}': '{{ hash_value }}'
+
+build:
+  number: 0
+  entry_points:
+    - unit2 = unittest2:main_
+    - unit2-3.6 = unittest2:main_
+  script: python setup.py install  --single-version-externally-managed --record=record.txt
+
+requirements:
+  build:
+    - python
+    - setuptools
+  run:
+    - python
+
+test:
+  imports:
+    - unittest2
+    - unittest2.test
+
+about:
+  home: http://pypi.python.org/pypi/unittest2
+  license: BSD License
+  license_family: BSD
+  license_file: ''
+  summary: A Python 3 compatible version of unittest2
+  description: "unittest2 is a backport of the new features added to the unittest testing\nframework in Python 2.7 and 3.2.\n\nThis is a Python 3 compatible version of unittest2. Tested with Python 3.0,\n\
+    3.1 and 3.2.\n\nAlthough the PyPI project name is \"unittest2py3k\", the Python package is called\nunittest2. Version numbers are the same as the Python 2 unittest2 package.\n\nFor full details, including\
+    \ changelog, see:\n\n* `unittest2 on PyPI <http://pypi.python.org/pypi/unittest2>`_\n\nunittest2py3k is maintained in the unittest-ext repository:\n\n* `unittest2py3k svn repository\n  <http://code.google.com/p/unittest-ext/source/browse/#svn/trunk/unittest2-py3k>`_"
+  doc_url: ''
+  dev_url: ''
+
+extra:
+  recipe-maintainers: ''
