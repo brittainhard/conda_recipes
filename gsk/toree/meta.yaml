@@ -1,0 +1,51 @@
+{% set name = "toree" %}
+{% set version = "0.2.0.dev1" %}
+
+package:
+  name: '{{ name|lower }}'
+  version: '{{ version }}'
+
+source:
+  fn: '{{ name }}-{{ version }}.tar.gz'
+  url: https://pypi.anaconda.org/hyoon/simple/{{ name }}/{{ version }}/{{ name }}-{{ version }}.tar.gz
+
+build:
+  number: 0
+  entry_points:
+    - jupyter-toree = toree.toreeapp:main
+  script: python setup.py install  --single-version-externally-managed --record=record.txt
+
+requirements:
+  build:
+    - python
+    - setuptools
+    - jupyter_core >=4.0,<5.0
+    - jupyter_client >=4.0,<5.0
+    - traitlets >=4.0,<5.0
+  run:
+    - python
+    - jupyter_core >=4.0,<5.0
+    - jupyter_client >=4.0,<5.0
+    - traitlets >=4.0,<5.0
+
+test:
+  imports:
+    - toree
+  commands:
+    - jupyter-toree --help
+
+about:
+  home: http://toree.incubator.apache.org/
+  license: Apache Software License
+  license_family: APACHE
+  license_file: ''
+  summary: Apache Toree (incubator). A Jupyter kernel for enabling remote applications to interaction with Apache Spark.
+  description: "This package will install Apache Toree as a Jupyter kernel.\n\n    Apache Toree is an effort undergoing incubation at the Apache Software\n    Foundation (ASF), sponsored by the Apache Incubator\
+    \ PMC.\n\n    Incubation is required of all newly accepted projects until a further review\n    indicates that the infrastructure, communications, and decision making process\n    have stabilized in\
+    \ a manner consistent with other successful ASF projects.\n\n    While incubation status is not necessarily a reflection of the completeness\n    or stability of the code, it does indicate that the\
+    \ project has yet to be\n    fully endorsed by the ASF."
+  doc_url: ''
+  dev_url: ''
+
+extra:
+  recipe-maintainers: ''
