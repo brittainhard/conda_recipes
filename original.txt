@@ -255,7 +255,7 @@ impyla==0.14.0
 ipykernel==4.6.1
 ipython==6.1.0
 ipython-genutils==0.2.0
-ipython-sql==0.3.7.1
+ipython-sql==0.3.8
 ipywidgets==6.0.0
 JayDeBeApi==1.1.1
 jdcal==1.3
