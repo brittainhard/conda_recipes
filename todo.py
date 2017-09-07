@@ -49,11 +49,13 @@ def search_packages(package_list):
     for package in package_list:
         search_string = "conda search --platform linux-64 {}={} --spec {}".format(package["name"], package["version"], CHANNELS)
         result = process_call(search_string)
-        if not result[1]:
+        if not result[1] and package["name"] in str(result[0]):
             py3 = "py3" in str(result[0])
             py2 = "py27" in str(result[0])
             if package["python2"] and package["python3"]:
                 if not (py2 or py3):
+                    package["available"] = True
+                elif py2 and py3:
                     package["available"] = True
                 elif py2 and not py3:
                     package["available"] = False
@@ -61,8 +63,6 @@ def search_packages(package_list):
                 elif py3 and not py2:
                     package["available"] = False
                     package["build"] = "py2"
-                elif py2 and py3:
-                    package["available"] = True
 
             if package["python2"] and not py2:
                 package["available"] = False
@@ -95,5 +95,6 @@ x = get_package_list(common)
 y = get_package_list(py3p, condition=3)
 z = get_package_list(py2p, condition=2)
 a = x + y + z
-df = pd.DataFrame.from_dict(search_packages(a[:10]))
-print(df)
+writer = pd.ExcelWriter('output.xlsx')
+df = pd.DataFrame.from_dict(search_packages(a))
+df.to_excel(writer, "Sheet1")
