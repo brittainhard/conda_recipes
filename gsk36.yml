@@ -78,3 +78,6 @@ dependencies:
   - pyfasta=0.5.2
   - h5py=2.7.0
   - mygene=3.0.0
+  - r-essentials
+  - r-irkernel
+  - rpy2

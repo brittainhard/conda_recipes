@@ -1,4 +1,4 @@
-name: gsk2
+name: gsk27
 channels:
   - glaxosmithkline
   - defaults
@@ -79,6 +79,9 @@ dependencies:
   - tensorflow=0.12.0
   - cython=0.25.2
   - scikit-learn=0.18.2
-  - numpy=1.7.1
+  - numpy=1.12
   - haralyzer=1.4.10
   - python-docx=0.8.6
+  - r-essentials
+  - r-irkernel
+  - rpy2
