@@ -246,7 +246,7 @@ versions = {"name":["r-" + x[0].lower() for x in package_strings], "version":[x[
 
 def search_packages():
     for x, y in zip(versions["name"], versions["version"]):
-        search_string = "conda search --platform linux-64 {}={}=r3.3.2_* --spec -c defaults -c r".format(x, y)
+        search_string = "conda search --platform linux-64 {}={}=r3.3.3_* --spec -c defaults -c r".format(x, y)
         is_available = process_call(search_string)
         if is_available == 1:
             versions["available"].append(False)
