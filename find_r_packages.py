@@ -19,7 +19,7 @@ R.oo_1.21.0.tar.gz,
 cgdsr_1.2.6.tar.gz,
 cluster_2.0.6.tar.gz,
 colorspace_1.3-2.tar.gz,
-corrplot_0.77.tar.gcorrplot_0.77.tar.gzz,
+corrplot_0.77.tar.gz,
 crayon_1.3.2.tar.gz,
 data.table_1.10.4.tar.gz,
 jsonlite_1.5.tar.gz,
@@ -246,16 +246,17 @@ versions = {"name":["r-" + x[0].lower() for x in package_strings], "version":[x[
 
 def search_packages():
     for x, y in zip(versions["name"], versions["version"]):
-        search_string = "conda search --platform linux-64 {}={} --spec".format(x, y)
+        search_string = "conda search --platform linux-64 {}={}=r3.3.2_* --spec -c defaults -c r".format(x, y)
         is_available = process_call(search_string)
         if is_available == 1:
             versions["available"].append(False)
-        elif is_available == 0:
+        else:
             versions["available"].append(True)
 
 
 def process_call(search_string):
     return subprocess.call(shlex.split(search_string))
+
 
 search_packages()
 

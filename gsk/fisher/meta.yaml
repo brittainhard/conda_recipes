@@ -1,23 +1,28 @@
+{% set name = "fisher" %}
+{% set version = "0.1.5" %}
+{% set hash_type = "sha256" %}
+{% set hash_value = "7519d2c884be6f5844bfde900fd294e98a33fe9a943c6b03800513cd281859c3" %}
+
 package:
-  name: fisher
-  version: "0.1.4"
+  name: '{{ name|lower }}'
+  version: '{{ version }}'
 
 source:
-  fn: fisher-0.1.4.tar.gz
-  url: https://files.pythonhosted.org/packages/b2/03/da73cc8582c34bafbc4ec4b572f9691c9ae5d0ae743a359b1d16414439f9/fisher-0.1.4.tar.gz
-  sha256: bba9e4ece8dda18f7e67fee487947a5ac28ed2bb138600da8b214ac051f87ebf
+  fn: '{{ name }}-{{ version }}.tar.gz'
+  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+  '{{ hash_type }}': '{{ hash_value }}'
 
 build:
   number: 0
+  script: 'python setup.py install '
 
 requirements:
   build:
-    - python
     - numpy
-
+    - python
   run:
-    - python
     - numpy
+    - python
 
 test:
   imports:
@@ -26,9 +31,21 @@ test:
 about:
   home: http://github.com/brentp/fishers_exact_test
   license: BSD License
-  summary: "Fast Fisher's Exact Test"
-
+  license_family: BSD
+  license_file: ''
+  summary: Fast Fisher's Exact Test
+  description: "Fisher's Exact Test\n===================\n\n.. image:: https://travis-ci.org/brentp/fishers_exact_test.svg?branch=master\n    :target: https://travis-ci.org/brentp/fishers_exact_test\n\n\
+    Simple, fast implementation of `Fisher's exact test <http://en.wikipedia.org/wiki/Fisher's_exact_test>`_. . For example, for the following table:\n\n============  =====================  =========================\n\
+    o              Having the property    Not having the property\n============  =====================  =========================\nSelected      12                     5\nNot selected  29              \
+    \       2\n============  =====================  =========================\n\nPerhaps we are interested in whether there is any difference of property in selected vs. non-selected groups, then we can\
+    \ do the Fisher's exact test.\n\n\nInstallation\n============\nwithin this folder ::\n\n    easy_install .\n\nfrom pypi ::\n\n    easy_install fisher\n\nor from github (contributions welcomed) ::\n\n\
+    \    git clone git://github.com/brentp/fishers_exact_test.git\n\n\nUsage\n=====\n``fisher.pvalue()`` accepts 4 values corresponding to the 2-by-2 contingency table, returns an object with attributes\
+    \ for left_tail, right_tail, and two_tail p-values\n::\n\n    >>> from fisher import pvalue\n    >>> mat = [[12, 5], [29, 2]]\n    >>> p = pvalue(12, 5, 29, 2)\n    >>> p.left_tail, p.right_tail, p.two_tail\
+    \  # doctest: +NORMALIZE_WHITESPACE, +ELLIPSIS\n    (0.04455473783507..., 0.994525206021..., 0.0802685520741...)\n\nBenchmark\n=========\nA simple benchmark that calls the Fisher's exact test 1000 times\
+    \ (in ``scripts/rfisher.py``)::\n\n    calling python fisher...\n    iterations/sec: 3000.62526381\n    calling rpy fisher...\n    iterations/sec: 289.225902364\n    calling R directly...\n    iterations/sec:\
+    \ 244.36542276\n\nSo the cython fisher is up to 10 times faster than rpy or R version.\n"
+  doc_url: ''
+  dev_url: ''
 
 extra:
-  recipe-maintainers:
-    - brittainhard
+  recipe-maintainers: ''

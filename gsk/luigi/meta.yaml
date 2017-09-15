@@ -1,0 +1,60 @@
+{% set name = "luigi" %}
+{% set version = "2.6.2" %}
+{% set sha256 = "8de76dd1631f133407cd104f3aa4a51a7bfef92d0f46482430bd044c3f90e7c0" %}
+{% set build = 0 %}
+
+package:
+  name: {{ name }}
+  version: {{ version }}
+
+source:
+  fn: {{ name }}-{{ version }}.tar.gz
+  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+  sha256: {{ sha256 }}
+
+build:
+  number: {{ build }}
+  script: python setup.py install --single-version-externally-managed --record record.txt
+  entry_points:
+    - luigi = luigi.cmdline:luigi_run
+    - luigid = luigi.cmdline:luigid
+    - luigi-grep = luigi.tools.luigi_grep:main
+    - luigi-deps = luigi.tools.deps:main
+
+requirements:
+  build:
+    - python
+    - setuptools
+  run:
+    - python
+    - setuptools
+    - pyparsing
+    - tornado >=4.0,<5
+    - python-daemon <3.0  # [not win]
+
+test:
+  imports:
+    - luigi
+    - luigi.contrib
+    - luigi.contrib.hdfs
+    - luigi.tools
+    - luigi.scheduler
+  commands:
+    - luigi --help
+    - luigid --help
+    - luigi-grep --help
+    - luigi-deps --help
+
+about:
+  home: https://github.com/spotify/luigi
+  license_file: LICENSE
+  license: Apache-2.0
+  license_family: Apache
+  summary: 'Workflow mgmgt + task scheduling + dependency resolution.'
+  dev_url: https://github.com/spotify/luigi
+  doc_url: https://luigi.readthedocs.io/en/stable/
+
+extra:
+  recipe-maintainers:
+    - ocefpaf
+    - kwilcox

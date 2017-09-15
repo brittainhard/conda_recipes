@@ -98,3 +98,4 @@ a = x + y + z
 writer = pd.ExcelWriter('output.xlsx')
 df = pd.DataFrame.from_dict(search_packages(a))
 df.to_excel(writer, "Sheet1")
+writer.save()

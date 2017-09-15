@@ -14,7 +14,6 @@ source:
 
 build:
   number: 0
-  string: py27_0
   script: python setup.py install --single-version-externally-managed --record record.txt
 
 requirements:
