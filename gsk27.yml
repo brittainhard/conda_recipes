@@ -5,6 +5,7 @@ channels:
   - r
 dependencies:
   - python=2.7
+  - xpermutations=1.0.1
   - scikit-allel=1.1.6
   - gemini=0.18.3
   - sqlalchemy=1.1.11
