@@ -1,0 +1,85 @@
+{% set version = '0.1.0-24' %}
+
+{% set posix = 'm2-' if win else '' %}
+{% set native = 'm2w64-' if win else '' %}
+
+package:
+  name: r-c50
+  version: {{ version|replace("-", "_") }}
+
+source:
+  fn: C50_{{ version }}.tar.gz
+  url:
+    - https://cran.r-project.org/src/contrib/C50_{{ version }}.tar.gz
+    - https://cran.r-project.org/src/contrib/Archive/C50/C50_{{ version }}.tar.gz
+
+
+  sha256: 617ee8ae617a075213414c07739ce92d9e6927783d01588fd0e2315157065e9d
+  # patches:
+   # List any patch files here
+   # - fix.patch
+
+build:
+  # If this is a new build for the same version, increment the build number.
+  number: 0
+
+  # This is required to make R link correctly on Linux.
+  rpaths:
+    - lib/R/lib/
+    - lib/
+
+
+requirements:
+  build:
+    - r-base
+    - r-partykit
+    - posix                # [win]
+    - {{native}}toolchain  # [win]
+    - gcc                  # [not win]
+
+  run:
+    - r-base
+    - r-partykit
+    - {{native}}gcc-libs   # [win]
+    - libgcc               # [not win]
+
+test:
+  commands:
+    # You can put additional test commands to be run here.
+    - $R -e "library('C50')"  # [not win]
+    - "\"%R%\" -e \"library('C50')\""  # [win]
+
+  # You can also put a file called run_test.py, run_test.sh, or run_test.bat
+  # in the recipe that will be run at test time.
+
+  # requires:
+    # Put any additional test requirements here.
+
+about:
+  home: https://CRAN.R-project.org/package=C50
+  license: GPL-3
+  summary: C5.0 decision trees and rule-based models for pattern recognition.
+  license_family: GPL3
+
+# The original CRAN metadata for this package was:
+
+# Package: C50
+# Type: Package
+# Title: C5.0 Decision Trees and Rule-Based Models
+# Version: 0.1.0-24
+# Date: 2015-03-08
+# Author: Max Kuhn, Steve Weston, Nathan Coulter, Mark Culp. C code for C5.0 by R. Quinlan
+# Maintainer: Max Kuhn <mxkuhn@gmail.com>
+# Description: C5.0 decision trees and rule-based models for pattern recognition.
+# Imports: partykit
+# Depends: R (>= 2.10.0)
+# License: GPL-3
+# LazyLoad: yes
+# NeedsCompilation: yes
+# Packaged: 2015-03-08 22:48:14 UTC; kuhna03
+# Repository: CRAN
+# Date/Publication: 2015-03-09 07:39:37
+
+# See
+# http://docs.continuum.io/conda/build.html for
+# more information about meta.yaml
