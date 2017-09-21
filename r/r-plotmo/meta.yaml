@@ -1,0 +1,81 @@
+{% set version = '3.3.4' %}
+
+{% set posix = 'm2-' if win else '' %}
+{% set native = 'm2w64-' if win else '' %}
+
+package:
+  name: r-plotmo
+  version: {{ version|replace("-", "_") }}
+
+source:
+  fn: plotmo_{{ version }}.tar.gz
+  url:
+    - https://cran.r-project.org/src/contrib/plotmo_{{ version }}.tar.gz
+    - https://cran.r-project.org/src/contrib/Archive/plotmo/plotmo_{{ version }}.tar.gz
+
+
+  sha256: fe29d4c940b755784152e09f59dae130b2d6a10e99854c79dfdfec59ac6156c8
+  # patches:
+   # List any patch files here
+   # - fix.patch
+
+build:
+  # If this is a new build for the same version, increment the build number.
+  number: 0
+
+  # This is required to make R link correctly on Linux.
+  rpaths:
+    - lib/R/lib/
+    - lib/
+
+# Suggests: C50 (>= 0.1.0-24), earth (>= 4.4.6), gbm (>= 2.1.1), glmnet (>= 2.0.5), glmnetUtils (>= 1.0.3), MASS (>= 7.3-45), neuralnet (>= 1.33), rpart (>= 4.1-10), rpart.plot (>= 2.1.0)
+requirements:
+  build:
+    - r-base
+    - r-teachingdemos
+    - r-plotrix
+
+  run:
+    - r-base
+    - r-teachingdemos
+    - r-plotrix
+
+test:
+  commands:
+    # You can put additional test commands to be run here.
+    - $R -e "library('plotmo')"  # [not win]
+    - "\"%R%\" -e \"library('plotmo')\""  # [win]
+
+  # You can also put a file called run_test.py, run_test.sh, or run_test.bat
+  # in the recipe that will be run at test time.
+
+  # requires:
+    # Put any additional test requirements here.
+
+about:
+  home: http://www.milbo.users.sonic.net
+  license: GPL-3
+  summary: Plot model surfaces for a wide variety of models using partial dependence plots and
+    other techniques. Also plot model residuals and other information on the model.
+  license_family: GPL3
+
+# The original CRAN metadata for this package was:
+
+# Package: plotmo
+# Version: 3.3.4
+# Title: Plot a Model's Response and Residuals
+# Author: Stephen Milborrow
+# Maintainer: Stephen Milborrow <milbo@sonic.net>
+# Depends: R (>= 3.2.0), plotrix, TeachingDemos
+# Description: Plot model surfaces for a wide variety of models using partial dependence plots and other techniques. Also plot model residuals and other information on the model.
+# Suggests: C50 (>= 0.1.0-24), earth (>= 4.4.6), gbm (>= 2.1.1), glmnet (>= 2.0.5), glmnetUtils (>= 1.0.3), MASS (>= 7.3-45), neuralnet (>= 1.33), rpart (>= 4.1-10), rpart.plot (>= 2.1.0)
+# License: GPL-3
+# URL: http://www.milbo.users.sonic.net
+# NeedsCompilation: no
+# Packaged: 2017-07-26 23:50:12 UTC; milbo
+# Repository: CRAN
+# Date/Publication: 2017-07-27 21:39:53 UTC
+
+# See
+# http://docs.continuum.io/conda/build.html for
+# more information about meta.yaml
