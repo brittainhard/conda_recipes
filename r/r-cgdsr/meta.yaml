@@ -1,0 +1,86 @@
+{% set version = '1.2.6' %}
+
+{% set posix = 'm2-' if win else '' %}
+{% set native = 'm2w64-' if win else '' %}
+
+package:
+  name: r-cgdsr
+  version: {{ version|replace("-", "_") }}
+
+source:
+  fn: cgdsr_{{ version }}.tar.gz
+  url:
+    - https://cran.r-project.org/src/contrib/cgdsr_{{ version }}.tar.gz
+    - https://cran.r-project.org/src/contrib/Archive/cgdsr/cgdsr_{{ version }}.tar.gz
+
+
+  sha256: e862f85eec9384082a7755fd66e2a175c33a989cbda83e9a860453f7ce330217
+  # patches:
+   # List any patch files here
+   # - fix.patch
+
+build:
+  # If this is a new build for the same version, increment the build number.
+  number: 0
+
+  # This is required to make R link correctly on Linux.
+  rpaths:
+    - lib/R/lib/
+    - lib/
+
+# Suggests: testthat
+requirements:
+  build:
+    - r-base
+    - r-r.methodss3
+    - r-r.oo
+
+  run:
+    - r-base
+    - r-r.methodss3
+    - r-r.oo
+
+test:
+  commands:
+    # You can put additional test commands to be run here.
+    - $R -e "library('cgdsr')"  # [not win]
+    - "\"%R%\" -e \"library('cgdsr')\""  # [win]
+
+  # You can also put a file called run_test.py, run_test.sh, or run_test.bat
+  # in the recipe that will be run at test time.
+
+  # requires:
+    # Put any additional test requirements here.
+
+about:
+  home: https://github.com/cBioPortal/cgdsr
+  license: LGPL-3
+  summary: Provides a basic set of R functions for querying the Cancer  Genomics Data Server
+    (CGDS), hosted by the Computational Biology Center at  Memorial-Sloan-Kettering
+    Cancer Center (MSKCC).
+  license_family: LGPL
+
+# The original CRAN metadata for this package was:
+
+# Package: cgdsr
+# Type: Package
+# Title: R-Based API for Accessing the MSKCC Cancer Genomics Data Server (CGDS)
+# Version: 1.2.6
+# Date: 2017-04-10
+# Author: Anders Jacobsen <jacobsen@cbio.mskcc.org>
+# Maintainer: Augustin Luna <lunaa@cbio.mskcc.org>
+# Description: Provides a basic set of R functions for querying the Cancer  Genomics Data Server (CGDS), hosted by the Computational Biology Center at  Memorial-Sloan-Kettering Cancer Center (MSKCC).
+# License: LGPL-3
+# LazyLoad: yes
+# URL: https://github.com/cBioPortal/cgdsr
+# Depends: R (>= 2.12.0)
+# Imports: R.oo, R.methodsS3
+# Suggests: testthat
+# NeedsCompilation: no
+# Repository: CRAN
+# Packaged: 2017-04-11 11:05:36 UTC; user
+# Date/Publication: 2017-04-11 12:22:10 UTC
+
+# See
+# http://docs.continuum.io/conda/build.html for
+# more information about meta.yaml

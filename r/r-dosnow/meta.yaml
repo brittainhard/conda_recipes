@@ -1,0 +1,86 @@
+{% set version = '1.0.14' %}
+
+{% set posix = 'm2-' if win else '' %}
+{% set native = 'm2w64-' if win else '' %}
+
+package:
+  name: r-dosnow
+  version: {{ version|replace("-", "_") }}
+
+source:
+  fn: doSNOW_{{ version }}.tar.gz
+  url:
+    - https://cran.r-project.org/src/contrib/doSNOW_{{ version }}.tar.gz
+    - https://cran.r-project.org/src/contrib/Archive/doSNOW/doSNOW_{{ version }}.tar.gz
+
+
+  sha256: 2fa821c89801e2a7b3c51aeedff37ccf14a386734a37ffb1145b17432222d3f5
+  # patches:
+   # List any patch files here
+   # - fix.patch
+
+build:
+  # If this is a new build for the same version, increment the build number.
+  number: 0
+
+  # This is required to make R link correctly on Linux.
+  rpaths:
+    - lib/R/lib/
+    - lib/
+
+# Suggests: compiler, RUnit, caret, mlbench, rpart
+requirements:
+  build:
+    - r-base
+    - r-foreach >=1.2.0
+    - r-iterators >=1.0.0
+    - r-snow >=0.3.0
+
+  run:
+    - r-base
+    - r-foreach >=1.2.0
+    - r-iterators >=1.0.0
+    - r-snow >=0.3.0
+
+test:
+  commands:
+    # You can put additional test commands to be run here.
+    - $R -e "library('doSNOW')"  # [not win]
+    - "\"%R%\" -e \"library('doSNOW')\""  # [win]
+
+  # You can also put a file called run_test.py, run_test.sh, or run_test.bat
+  # in the recipe that will be run at test time.
+
+  # requires:
+    # Put any additional test requirements here.
+
+about:
+  home: https://CRAN.R-project.org/package=doSNOW
+  license: GPL-2
+  summary: Provides a parallel backend for the %dopar% function using Luke Tierney's snow package.
+  license_family: GPL2
+
+# The original CRAN metadata for this package was:
+
+# Package: doSNOW
+# Type: Package
+# Title: Foreach Parallel Adaptor for the 'snow' Package
+# Version: 1.0.14
+# Authors@R: c(person("Rich", "Calaway", role="cre", email = "richcala@microsoft.com"),  person("Revolution Analytics", role=c("aut","cph")), person("Stephen", "Weston", role="aut"))
+# Description: Provides a parallel backend for the %dopar% function using Luke Tierney's snow package.
+# Depends: R (>= 2.5.0), foreach(>= 1.2.0), iterators(>= 1.0.0), snow(>= 0.3.0), utils
+# Suggests: compiler, RUnit, caret, mlbench, rpart
+# License: GPL-2
+# Author: Rich Calaway [cre], Revolution Analytics [aut, cph], Stephen Weston [aut]
+# Maintainer: Rich Calaway <richcala@microsoft.com>
+# Repository: CRAN
+# Repository/R-Forge/Project: dosnow
+# Repository/R-Forge/Revision: 27
+# Repository/R-Forge/DateTimeStamp: 2015-10-13 20:31:49
+# Date/Publication: 2015-10-14 09:53:50
+# NeedsCompilation: no
+# Packaged: 2015-10-13 20:45:25 UTC; rforge
+
+# See
+# http://docs.continuum.io/conda/build.html for
+# more information about meta.yaml
