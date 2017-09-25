@@ -1,4 +1,4 @@
-{% set version = '3.6-6' %}
+{% set version = '3.6-5' %}
 
 {% set posix = 'm2-' if win else '' %}
 {% set native = 'm2w64-' if win else '' %}
@@ -14,7 +14,7 @@ source:
     - https://cran.r-project.org/src/contrib/Archive/plotrix/plotrix_{{ version }}.tar.gz
 
 
-  sha256: 0427fdaf111b8acad20ad7c08dfc82d657b840869bb8211bbeeb81eac7e51e1e
+  sha256: 8b560fa95b2c1bcac0581850f671fe403c411e88ab2076ef4002f88f872fc504
   # patches:
    # List any patch files here
    # - fix.patch

@@ -1,0 +1,81 @@
+{% set version = '0.3-8' %}
+
+{% set posix = 'm2-' if win else '' %}
+{% set native = 'm2w64-' if win else '' %}
+
+package:
+  name: r-ellipse
+  version: {{ version|replace("-", "_") }}
+
+source:
+  fn: ellipse_{{ version }}.tar.gz
+  url:
+    - https://cran.r-project.org/src/contrib/ellipse_{{ version }}.tar.gz
+    - https://cran.r-project.org/src/contrib/Archive/ellipse/ellipse_{{ version }}.tar.gz
+
+
+  sha256: 508d474c142f0770c25763d6c8f8f8c9dcf8205afd42ffa22e6be1e0360e7f45
+  # patches:
+   # List any patch files here
+   # - fix.patch
+
+build:
+  # If this is a new build for the same version, increment the build number.
+  number: 0
+
+  # This is required to make R link correctly on Linux.
+  rpaths:
+    - lib/R/lib/
+    - lib/
+
+# Suggests: MASS
+requirements:
+  build:
+    - r-base
+
+  run:
+    - r-base
+
+test:
+  commands:
+    # You can put additional test commands to be run here.
+    - $R -e "library('ellipse')"  # [not win]
+    - "\"%R%\" -e \"library('ellipse')\""  # [win]
+
+  # You can also put a file called run_test.py, run_test.sh, or run_test.bat
+  # in the recipe that will be run at test time.
+
+  # requires:
+    # Put any additional test requirements here.
+
+about:
+  home: https://CRAN.R-project.org/package=ellipse
+  license: GPL (>= 2)
+  summary: This package contains various routines for drawing ellipses and ellipse-like confidence
+    regions, implementing the plots described in Murdoch and Chow (1996), A graphical
+    display of large correlation matrices, The American Statistician 50, 178-180. There
+    are also routines implementing the profile plots described in Bates and Watts (1988),
+    Nonlinear Regression Analysis and its Applications.
+  license_family: GPL3
+
+# The original CRAN metadata for this package was:
+
+# Package: ellipse
+# Version: 0.3-8
+# Date: 2013-04-13
+# Title: Functions for drawing ellipses and ellipse-like confidence regions
+# Author: Duncan Murdoch <murdoch@stats.uwo.ca> and E. D. Chow (porting to R by Jesus M. Frias Celayeta <iosu@bureau.ucc.ie>)
+# Maintainer: Duncan Murdoch <murdoch@stats.uwo.ca>
+# Description: This package contains various routines for drawing ellipses and ellipse-like confidence regions, implementing the plots described in Murdoch and Chow (1996), A graphical display of large correlation matrices, The American Statistician 50, 178-180. There are also routines implementing the profile plots described in Bates and Watts (1988), Nonlinear Regression Analysis and its Applications.
+# Depends: R (>= 2.0.0),graphics,stats
+# Suggests: MASS
+# LazyLoad: yes
+# License: GPL (>= 2)
+# Packaged: 2013-04-13 14:23:12 UTC; murdoch
+# NeedsCompilation: no
+# Repository: CRAN
+# Date/Publication: 2013-04-13 18:32:27
+
+# See
+# http://docs.continuum.io/conda/build.html for
+# more information about meta.yaml

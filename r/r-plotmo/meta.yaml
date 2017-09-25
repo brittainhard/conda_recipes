@@ -1,4 +1,4 @@
-{% set version = '3.3.4' %}
+{% set version = '3.3.3' %}
 
 {% set posix = 'm2-' if win else '' %}
 {% set native = 'm2w64-' if win else '' %}
@@ -14,7 +14,7 @@ source:
     - https://cran.r-project.org/src/contrib/Archive/plotmo/plotmo_{{ version }}.tar.gz
 
 
-  sha256: fe29d4c940b755784152e09f59dae130b2d6a10e99854c79dfdfec59ac6156c8
+  sha256: 5b7ffdc4a91d8db93f5f85e7b05964e4037681ecc8781b232d5edc51a3051b6e
   # patches:
    # List any patch files here
    # - fix.patch
