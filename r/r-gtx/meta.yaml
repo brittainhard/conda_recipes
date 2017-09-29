@@ -1,0 +1,84 @@
+{% set version = '0.0.8' %}
+
+{% set posix = 'm2-' if win else '' %}
+{% set native = 'm2w64-' if win else '' %}
+
+package:
+  name: r-gtx
+  version: {{ version|replace("-", "_") }}
+
+source:
+  fn: gtx_{{ version }}.tar.gz
+  url:
+    - https://cran.r-project.org/src/contrib/gtx_{{ version }}.tar.gz
+    - https://cran.r-project.org/src/contrib/Archive/gtx/gtx_{{ version }}.tar.gz
+
+
+  sha256: 46bcfa4802c951bfbe575ab17f241889482757a37634d42f4fb1512fa294e174
+  # patches:
+   # List any patch files here
+   # - fix.patch
+
+build:
+  # If this is a new build for the same version, increment the build number.
+  number: 0
+
+  # This is required to make R link correctly on Linux.
+  rpaths:
+    - lib/R/lib/
+    - lib/
+
+
+requirements:
+  build:
+    - r-base
+    - r-survival
+
+  run:
+    - r-base
+    - r-survival
+
+test:
+  commands:
+    # You can put additional test commands to be run here.
+    - $R -e "library('gtx')"  # [not win]
+    - "\"%R%\" -e \"library('gtx')\""  # [win]
+
+  # You can also put a file called run_test.py, run_test.sh, or run_test.bat
+  # in the recipe that will be run at test time.
+
+  # requires:
+    # Put any additional test requirements here.
+
+about:
+  home: https://CRAN.R-project.org/package=gtx
+  license: GPL (>= 2)
+  summary: Assorted tools for genetic association analyses.  The current focus is on implementing
+    (either exactly or approximately) regression analyses using summary statistics instead
+    of using subject-specific data.  So far, functions exist to support multi-SNP risk
+    score analyses, multi-SNP conditional regression analyses, and multi-phenotype analyses,
+    using summary statistics.  There are helper functions for reading and manipulating
+    subject-specific genotype data, which provide a platform for calculating the summary
+    statistics, or for using R to conduct other analyses not supported by specific GWAS
+    analysis tools.
+  license_family: GPL3
+
+# The original CRAN metadata for this package was:
+
+# Package: gtx
+# Version: 0.0.8
+# Date: 2012-09-20
+# Title: Genetics ToolboX
+# Author: Toby Johnson <Toby.x.Johnson@gsk.com>
+# Maintainer: Toby Johnson <Toby.x.Johnson@gsk.com>
+# Depends: R (>= 2.4.0), survival
+# Description: Assorted tools for genetic association analyses.  The current focus is on implementing (either exactly or approximately) regression analyses using summary statistics instead of using subject-specific data.  So far, functions exist to support multi-SNP risk score analyses, multi-SNP conditional regression analyses, and multi-phenotype analyses, using summary statistics.  There are helper functions for reading and manipulating subject-specific genotype data, which provide a platform for calculating the summary statistics, or for using R to conduct other analyses not supported by specific GWAS analysis tools.
+# License: GPL (>= 2)
+# Packaged: 2013-01-11 11:01:21 UTC; tj357745
+# Repository: CRAN
+# Date/Publication: 2013-01-11 12:26:06
+# NeedsCompilation: no
+
+# See
+# http://docs.continuum.io/conda/build.html for
+# more information about meta.yaml

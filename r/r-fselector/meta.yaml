@@ -1,0 +1,90 @@
+{% set version = '0.21' %}
+
+{% set posix = 'm2-' if win else '' %}
+{% set native = 'm2w64-' if win else '' %}
+
+package:
+  name: r-fselector
+  version: {{ version|replace("-", "_") }}
+
+source:
+  fn: FSelector_{{ version }}.tar.gz
+  url:
+    - https://cran.r-project.org/src/contrib/FSelector_{{ version }}.tar.gz
+    - https://cran.r-project.org/src/contrib/Archive/FSelector/FSelector_{{ version }}.tar.gz
+
+
+  sha256: 93e65dbf8d049ecc55c4587cf2e847a600e337bb6896db5c651cc6adc9226562
+  # patches:
+   # List any patch files here
+   # - fix.patch
+
+build:
+  # If this is a new build for the same version, increment the build number.
+  number: 0
+
+  # This is required to make R link correctly on Linux.
+  rpaths:
+    - lib/R/lib/
+    - lib/
+
+# Suggests: mlbench, rpart
+requirements:
+  build:
+    - r-rjava
+    - r-base
+    - r-rweka
+    - r-digest
+    - r-entropy
+    - r-randomforest
+
+  run:
+    - r-rjava
+    - r-base
+    - r-rweka
+    - r-digest
+    - r-entropy
+    - r-randomforest
+
+test:
+  commands:
+    # You can put additional test commands to be run here.
+    - $R -e "library('FSelector')"  # [not win]
+    - "\"%R%\" -e \"library('FSelector')\""  # [win]
+
+  # You can also put a file called run_test.py, run_test.sh, or run_test.bat
+  # in the recipe that will be run at test time.
+
+  # requires:
+    # Put any additional test requirements here.
+
+about:
+  home: https://CRAN.R-project.org/package=FSelector
+  license: GPL-2
+  summary: Functions for selecting attributes from a given dataset. Attribute subset selection
+    is the process of identifying and removing as much of the irrelevant and redundant
+    information as possible.
+  license_family: GPL2
+
+# The original CRAN metadata for this package was:
+
+# Package: FSelector
+# Type: Package
+# Title: Selecting Attributes
+# Version: 0.21
+# Date: 2016-06-29
+# Author: Piotr Romanski, Lars Kotthoff
+# Maintainer: Lars Kotthoff <larsko@cs.ubc.ca>
+# Description: Functions for selecting attributes from a given dataset. Attribute subset selection is the process of identifying and removing as much of the irrelevant and redundant information as possible.
+# License: GPL-2
+# Imports: randomForest, RWeka, digest, entropy
+# Suggests: mlbench, rpart
+# LazyLoad: yes
+# NeedsCompilation: no
+# Packaged: 2016-06-30 02:35:21 UTC; larsko
+# Repository: CRAN
+# Date/Publication: 2016-06-30 17:56:47
+
+# See
+# http://docs.continuum.io/conda/build.html for
+# more information about meta.yaml
