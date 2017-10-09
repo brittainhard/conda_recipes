@@ -8,3 +8,5 @@ The command to get into a docker container:
 
 
 from theano.sandbox.rng_mrg import MRG_RandomStreams as RandomStreams
+
+docker run --name builder -v /Users/bhard/Documents/conda_recipes:/root/recipes -it centos6 /bin/bash
