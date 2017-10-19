@@ -1,0 +1,94 @@
+{% set version = '4.8-2' %}
+
+{% set posix = 'm2-' if win else '' %}
+{% set native = 'm2w64-' if win else '' %}
+
+package:
+  name: r-meta
+  version: {{ version|replace("-", "_") }}
+
+source:
+  fn: meta_{{ version }}.tar.gz
+  url:
+    - https://cran.r-project.org/src/contrib/meta_{{ version }}.tar.gz
+    - https://cran.r-project.org/src/contrib/Archive/meta/meta_{{ version }}.tar.gz
+
+
+  sha256: f4914a1b09c845b2c912ecb748414eeef19ead5ce72f9f401986360816e08c94
+  # patches:
+   # List any patch files here
+   # - fix.patch
+
+build:
+  # If this is a new build for the same version, increment the build number.
+  number: 0
+
+  # This is required to make R link correctly on Linux.
+  rpaths:
+    - lib/R/lib/
+    - lib/
+
+# Suggests: metafor (>= 1.9-9), lme4, numDeriv, BiasedUrn
+requirements:
+  build:
+    - r-base
+    - posix                # [win]
+    - {{native}}toolchain  # [win]
+    - gcc                  # [not win]
+
+  run:
+    - r-base
+    - {{native}}gcc-libs   # [win]
+    - libgcc               # [not win]
+
+test:
+  commands:
+    # You can put additional test commands to be run here.
+    - $R -e "library('meta')"  # [not win]
+    - "\"%R%\" -e \"library('meta')\""  # [win]
+
+  # You can also put a file called run_test.py, run_test.sh, or run_test.bat
+  # in the recipe that will be run at test time.
+
+  # requires:
+    # Put any additional test requirements here.
+
+about:
+  home: https://github.com/guido-s/meta http://meta-analysis-with-r.org
+  license: GPL (>= 2)
+  summary: "User-friendly general package providing standard methods for meta-analysis and supporting
+    Schwarzer, Carpenter, and R\xC3\xBCcker <DOI:10.1007/978-3-319-21416-0>, \"Meta-Analysis
+    with R\" (2015): - fixed effect and random effects meta-analysis; - several plots
+    (forest, funnel, Galbraith / radial, L'Abbe, Baujat, bubble); - statistical tests
+    and trim-and-fill method to evaluate bias in meta-analysis; - import data from 'RevMan
+    5'; - prediction interval, Hartung-Knapp and Paule-Mandel method for random effects
+    model; - cumulative meta-analysis and leave-one-out meta-analysis; - meta-regression
+    (if R package 'metafor' is installed); - generalised linear mixed models (if R packages
+    'metafor', 'lme4', 'numDeriv', and 'BiasedUrn' are installed)."
+
+  license_family: GPL3
+
+# The original CRAN metadata for this package was:
+
+# Package: meta
+# Title: General Package for Meta-Analysis
+# Version: 4.8-4
+# Depends: R (>= 2.9.1)
+# Imports: grid
+# Suggests: metafor (>= 1.9-9), lme4, numDeriv, BiasedUrn
+# Authors@R: c(person("Guido","Schwarzer", role=c("cre","aut"), email="sc@imbi.uni-freiburg.de"))
+# Date: 2017-08-11
+# URL: https://github.com/guido-s/meta http://meta-analysis-with-r.org
+# Description: User-friendly general package providing standard methods for meta-analysis and supporting Schwarzer, Carpenter, and RA14cker <DOI:10.1007/978-3-319-21416-0>, "Meta-Analysis with R" (2015): - fixed effect and random effects meta-analysis; - several plots (forest, funnel, Galbraith / radial, L'Abbe, Baujat, bubble); - statistical tests and trim-and-fill method to evaluate bias in meta-analysis; - import data from 'RevMan 5'; - prediction interval, Hartung-Knapp and Paule-Mandel method for random effects model; - cumulative meta-analysis and leave-one-out meta-analysis; - meta-regression (if R package 'metafor' is installed); - generalised linear mixed models (if R packages 'metafor', 'lme4', 'numDeriv', and 'BiasedUrn' are installed).
+# License: GPL (>= 2)
+# Encoding: UTF-8
+# NeedsCompilation: yes
+# Packaged: 2017-08-11 09:43:44 UTC; sc
+# Author: Guido Schwarzer [cre, aut]
+# Maintainer: Guido Schwarzer <sc@imbi.uni-freiburg.de>
+# Repository: CRAN
+# Date/Publication: 2017-08-11 22:09:11 UTC
+
+# See
+# http://docs.continuum.io/conda/build.html for
+# more information about meta.yaml
