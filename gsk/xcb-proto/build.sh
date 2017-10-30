@@ -22,7 +22,7 @@ fi
 
 # On Windows we need to regenerate the configure scripts.
 if [ -n "$VS_MAJOR" ] ; then
-    am_version=1.15 # keep sync'ed with meta.yaml
+    am_version=1.15 # keep sync'ed with oldmeta.yaml
     export ACLOCAL=aclocal-$am_version
     export AUTOMAKE=automake-$am_version
     autoreconf_args=(
